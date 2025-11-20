@@ -18,6 +18,8 @@ import { Slider } from "@/components/ui/slider";
 import { Heart, ShoppingCart, Search, SlidersHorizontal, X } from "lucide-react";
 import { products } from "@/data/mockData";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
+import { toast } from "@/hooks/use-toast";
 import {
   Sheet,
   SheetContent,
@@ -28,6 +30,7 @@ import {
 
 const Shop = () => {
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -324,8 +327,31 @@ const Shop = () => {
                         <ShoppingCart className="mr-2 h-4 w-4" />
                         Add to Cart
                       </Button>
-                      <Button variant="outline" size="icon" className="border-primary/30 transition-smooth hover:bg-primary/10">
-                        <Heart className="h-4 w-4" />
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        className={`border-primary/30 transition-smooth ${
+                          isInWishlist(product.id) 
+                            ? 'bg-primary/10 text-primary hover:bg-primary/20' 
+                            : 'hover:bg-primary/10'
+                        }`}
+                        onClick={() => {
+                          toggleWishlist({ 
+                            id: product.id, 
+                            name: product.name, 
+                            price: product.price, 
+                            image: product.image,
+                            description: product.description 
+                          });
+                          toast({
+                            title: isInWishlist(product.id) ? "Removed from wishlist" : "Added to wishlist",
+                            description: isInWishlist(product.id) 
+                              ? `${product.name} has been removed from your wishlist.`
+                              : `${product.name} has been added to your wishlist.`,
+                          });
+                        }}
+                      >
+                        <Heart className={`h-4 w-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
                       </Button>
                     </CardFooter>
                   </Card>

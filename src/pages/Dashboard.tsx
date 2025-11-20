@@ -1,19 +1,24 @@
 import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Package, Heart, User, MapPin } from "lucide-react";
+import { Package, Heart, User, MapPin, ShoppingCart, X } from "lucide-react";
 import { mockOrders } from "@/data/mockData";
 import { useAuth } from "@/contexts/AuthContext";
+import { useWishlist } from "@/contexts/WishlistContext";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "@/hooks/use-toast";
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const { wishlist, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") || "orders";
 
@@ -83,13 +88,77 @@ const Dashboard = () => {
 
           {/* Wishlist Tab */}
           <TabsContent value="wishlist">
-            <Card>
-              <CardContent className="p-12 text-center">
-                <Heart className="mx-auto mb-4 h-16 w-16 text-muted" />
-                <h3 className="mb-2 font-serif text-2xl font-bold">Your Wishlist is Empty</h3>
-                <p className="text-muted-foreground">Start adding items you love!</p>
-              </CardContent>
-            </Card>
+            {wishlist.length === 0 ? (
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <Heart className="mx-auto mb-4 h-16 w-16 text-muted" />
+                  <h3 className="mb-2 font-serif text-2xl font-bold">Your Wishlist is Empty</h3>
+                  <p className="mb-4 text-muted-foreground">Start adding items you love!</p>
+                  <Button asChild>
+                    <Link to="/shop">Browse Products</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {wishlist.map((item) => (
+                  <Card key={item.id} className="group overflow-hidden">
+                    <Link to={`/product/${item.id}`}>
+                      <CardHeader className="p-0">
+                        <div className="aspect-square overflow-hidden bg-muted">
+                          <img 
+                            src={item.image} 
+                            alt={item.name}
+                            className="h-full w-full object-cover transition-smooth group-hover:scale-105"
+                          />
+                        </div>
+                      </CardHeader>
+                      
+                      <CardContent className="p-4">
+                        <h3 className="mb-2 font-serif text-lg font-semibold">
+                          {item.name}
+                        </h3>
+                        <p className="mb-2 text-sm text-muted-foreground line-clamp-2">
+                          {item.description}
+                        </p>
+                        <p className="font-serif text-xl font-bold text-accent">
+                          ${item.price.toFixed(2)}
+                        </p>
+                      </CardContent>
+                    </Link>
+                    
+                    <CardFooter className="gap-2 p-4 pt-0">
+                      <Button 
+                        className="flex-1"
+                        onClick={() => {
+                          addToCart(item);
+                          toast({
+                            title: "Added to cart",
+                            description: `${item.name} has been added to your cart.`,
+                          });
+                        }}
+                      >
+                        <ShoppingCart className="mr-2 h-4 w-4" />
+                        Add to Cart
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="icon"
+                        onClick={() => {
+                          removeFromWishlist(item.id);
+                          toast({
+                            title: "Removed from wishlist",
+                            description: `${item.name} has been removed from your wishlist.`,
+                          });
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           {/* Profile Tab */}
