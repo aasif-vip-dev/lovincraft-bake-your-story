@@ -8,12 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift } from "lucide-react";
+import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift, Ticket as TicketIcon } from "lucide-react";
 import { Share2 } from "lucide-react";
 import { mockOrders } from "@/data/mockData";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useCart } from "@/contexts/CartContext";
+import { useSupport } from "@/contexts/SupportContext";
 import { toast } from "@/hooks/use-toast";
 import LoyaltyCard from "@/components/LoyaltyCard";
 import ReferralCard from "@/components/ReferralCard";
@@ -22,6 +23,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const { wishlist, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const { tickets } = useSupport();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") || "orders";
 
@@ -38,7 +40,7 @@ const Dashboard = () => {
         </div>
 
         <Tabs defaultValue={defaultTab} className="space-y-8">
-          <TabsList className="grid w-full grid-cols-5 lg:w-auto">
+          <TabsList className="grid w-full grid-cols-6 lg:w-auto">
             <TabsTrigger value="orders">
               <Package className="mr-2 h-4 w-4" />
               Orders
@@ -50,6 +52,10 @@ const Dashboard = () => {
             <TabsTrigger value="rewards">
               <Award className="mr-2 h-4 w-4" />
               Rewards
+            </TabsTrigger>
+            <TabsTrigger value="tickets">
+              <TicketIcon className="mr-2 h-4 w-4" />
+              Tickets
             </TabsTrigger>
             <TabsTrigger value="profile">
               <User className="mr-2 h-4 w-4" />
@@ -221,6 +227,58 @@ const Dashboard = () => {
                 </Button>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Support Tickets Tab */}
+          <TabsContent value="tickets" className="space-y-4">
+            {tickets.length === 0 ? (
+              <Card>
+                <CardContent className="p-12 text-center">
+                  <TicketIcon className="mx-auto mb-4 h-12 w-12 text-muted" />
+                  <h3 className="mb-2 font-serif text-xl font-bold">No support tickets</h3>
+                  <p className="text-muted-foreground">
+                    Use the chat widget to create a support ticket when you need help!
+                  </p>
+                </CardContent>
+              </Card>
+            ) : (
+              tickets.map(ticket => (
+                <Card key={ticket.id}>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <CardTitle className="text-lg">{ticket.subject}</CardTitle>
+                        <p className="text-sm text-muted-foreground">
+                          Ticket {ticket.id} • {new Date(ticket.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Badge 
+                        variant={
+                          ticket.status === "resolved" 
+                            ? "default" 
+                            : ticket.status === "in-progress" 
+                            ? "secondary" 
+                            : "outline"
+                        }
+                      >
+                        {ticket.status.toUpperCase()}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="mb-4 text-sm text-muted-foreground">{ticket.description}</p>
+                    <div className="rounded-lg bg-muted/30 p-3">
+                      <p className="text-sm">
+                        <strong>Contact:</strong> {ticket.email}
+                      </p>
+                      <p className="text-sm">
+                        <strong>Last Updated:</strong> {new Date(ticket.updatedAt).toLocaleString()}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
           </TabsContent>
 
           {/* Profile Tab */}
