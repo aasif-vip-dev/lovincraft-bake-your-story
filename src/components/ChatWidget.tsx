@@ -9,12 +9,16 @@ import { X, Send, MessageCircle, Ticket } from "lucide-react";
 import { useSupport } from "@/contexts/SupportContext";
 import { toast } from "@/hooks/use-toast";
 import loveLogo from "@/assets/love-logo.png";
+import RatingComponent from "@/components/RatingComponent";
 
 interface Message {
   id: string;
   text: string;
   sender: "user" | "bot";
   timestamp: string;
+  rating?: number;
+  ratingFeedback?: string;
+  showRating?: boolean;
 }
 
 const ChatWidget = () => {
@@ -35,7 +39,7 @@ const ChatWidget = () => {
     email: "",
   });
   
-  const { createTicket } = useSupport();
+  const { createTicket, rateMessage } = useSupport();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -116,6 +120,7 @@ const ChatWidget = () => {
           text: automatedResponse,
           sender: "bot",
           timestamp: new Date().toISOString(),
+          showRating: true,
         };
         setMessages(prev => [...prev, botMessage]);
       } else {
@@ -125,6 +130,7 @@ const ChatWidget = () => {
           text: "I'd love to help! For detailed assistance, please create a support ticket and our team will get back to you within 24 hours. 💌",
           sender: "bot",
           timestamp: new Date().toISOString(),
+          showRating: true,
         };
         setMessages(prev => [...prev, defaultMessage]);
       }
@@ -162,6 +168,21 @@ const ChatWidget = () => {
 
     setTicketForm({ subject: "", description: "", email: "" });
     setShowTicketForm(false);
+  };
+
+  const handleRateResponse = (messageId: string, rating: number, feedback?: string) => {
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === messageId
+          ? { ...msg, rating, ratingFeedback: feedback, showRating: false }
+          : msg
+      )
+    );
+    
+    toast({
+      title: "Thank you for your feedback! 💝",
+      description: "Your rating helps us improve our support experience.",
+    });
   };
 
   if (!isOpen) {
@@ -204,24 +225,36 @@ const ChatWidget = () => {
             {/* Chat Messages */}
             <div className="h-80 space-y-4 overflow-y-auto rounded-lg bg-muted/30 p-4">
               {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${
-                    message.sender === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
+                <div key={message.id} className="space-y-2">
                   <div
-                    className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                      message.sender === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-background"
+                    className={`flex ${
+                      message.sender === "user" ? "justify-end" : "justify-start"
                     }`}
                   >
-                    <p className="text-sm">{message.text}</p>
-                    <p className="mt-1 text-xs opacity-70">
-                      {new Date(message.timestamp).toLocaleTimeString()}
-                    </p>
+                    <div
+                      className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                        message.sender === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-background"
+                      }`}
+                    >
+                      <p className="text-sm">{message.text}</p>
+                      <p className="mt-1 text-xs opacity-70">
+                        {new Date(message.timestamp).toLocaleTimeString()}
+                      </p>
+                    </div>
                   </div>
+                  
+                  {/* Rating for bot messages */}
+                  {message.sender === "bot" && (message.showRating || message.rating) && (
+                    <div className="ml-2">
+                      <RatingComponent
+                        onRate={(rating, feedback) => handleRateResponse(message.id, rating, feedback)}
+                        currentRating={message.rating}
+                        currentFeedback={message.ratingFeedback}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
               <div ref={messagesEndRef} />

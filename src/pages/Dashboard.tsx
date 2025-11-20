@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift, Ticket as TicketIcon } from "lucide-react";
 import { Share2 } from "lucide-react";
 import { mockOrders } from "@/data/mockData";
+import RatingComponent from "@/components/RatingComponent";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useCart } from "@/contexts/CartContext";
@@ -23,7 +24,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const { wishlist, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
-  const { tickets } = useSupport();
+  const { tickets, rateTicket } = useSupport();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") || "orders";
 
@@ -267,13 +268,33 @@ const Dashboard = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="mb-4 text-sm text-muted-foreground">{ticket.description}</p>
-                    <div className="rounded-lg bg-muted/30 p-3">
-                      <p className="text-sm">
-                        <strong>Contact:</strong> {ticket.email}
-                      </p>
-                      <p className="text-sm">
-                        <strong>Last Updated:</strong> {new Date(ticket.updatedAt).toLocaleString()}
-                      </p>
+                    <div className="space-y-3">
+                      <div className="rounded-lg bg-muted/30 p-3">
+                        <p className="text-sm">
+                          <strong>Contact:</strong> {ticket.email}
+                        </p>
+                        <p className="text-sm">
+                          <strong>Last Updated:</strong> {new Date(ticket.updatedAt).toLocaleString()}
+                        </p>
+                      </div>
+                      
+                      {/* Ticket Rating */}
+                      {ticket.status === "resolved" && (
+                        <div>
+                          <p className="mb-2 text-sm font-medium">Rate your support experience:</p>
+                          <RatingComponent
+                            onRate={(rating, feedback) => {
+                              rateTicket(ticket.id, rating, feedback);
+                              toast({
+                                title: "Thank you for your feedback! 💝",
+                                description: "Your rating helps us improve our support.",
+                              });
+                            }}
+                            currentRating={ticket.rating}
+                            currentFeedback={ticket.ratingFeedback}
+                          />
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
