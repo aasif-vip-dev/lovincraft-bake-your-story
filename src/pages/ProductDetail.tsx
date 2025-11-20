@@ -4,8 +4,8 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, ShoppingCart, Star, Package, Truck, Shield } from "lucide-react";
-import { products, reviews } from "@/data/mockData";
+import { Heart, ShoppingCart, Star, Package, Truck, Shield, BookOpen } from "lucide-react";
+import { products, reviews, recipes } from "@/data/mockData";
 import { useCart } from "@/contexts/CartContext";
 
 const ProductDetail = () => {
@@ -29,6 +29,7 @@ const ProductDetail = () => {
   }
 
   const productReviews = reviews.filter(r => r.productId === product.id);
+  const productRecipe = recipes.find(r => r.productId === product.id);
 
   return (
     <div className="min-h-screen bg-background">
@@ -98,6 +99,17 @@ const ProductDetail = () => {
 
             {/* Features */}
             <div className="grid gap-4 border-t border-border pt-8">
+              {productRecipe && (
+                <Link to={`/recipe/${productRecipe.id}`}>
+                  <div className="flex items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 p-4 transition-colors hover:bg-primary/10">
+                    <BookOpen className="h-5 w-5 text-primary" />
+                    <div className="flex-1">
+                      <span className="font-semibold">View Recipe Instructions</span>
+                      <p className="text-xs text-muted-foreground">Step-by-step guide with video tutorial</p>
+                    </div>
+                  </div>
+                </Link>
+              )}
               <div className="flex items-center gap-3">
                 <Package className="h-5 w-5 text-primary" />
                 <span className="text-sm">Complete baking kit with instructions</span>
