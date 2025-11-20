@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Clock, Users, Download, Printer, ChefHat, Lightbulb, Video } from "lucide-react";
 import { recipes, products } from "@/data/mockData";
 import { toast } from "@/hooks/use-toast";
+import SocialShare from "@/components/SocialShare";
 
 const Recipe = () => {
   const { id } = useParams();
@@ -101,6 +102,17 @@ const Recipe = () => {
               <Printer className="mr-2 h-5 w-5" />
               Print Recipe
             </Button>
+          </div>
+
+          {/* Social Share */}
+          <div className="mt-6 flex justify-center">
+            <SocialShare
+              url={`/recipe/${recipe.id}`}
+              title={`Try this amazing recipe: ${recipe.name}`}
+              description={recipe.description}
+              image={product.image}
+              hashtags={["LovinCraftLove", "BakeWithLove", "BakingRecipe"]}
+            />
           </div>
         </div>
 
