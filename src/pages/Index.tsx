@@ -4,8 +4,11 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 import StoryPreview from "@/components/StoryPreview";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import Footer from "@/components/Footer";
+import { useReferralDetection } from "@/hooks/useReferralDetection";
 
 const Index = () => {
+  useReferralDetection();
+  
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
