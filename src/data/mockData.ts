@@ -129,11 +129,28 @@ export const mockOrders = [
     date: "2024-11-15",
     status: "delivered",
     items: [
-      { name: "The First Kiss Kit", quantity: 1, price: 34.99 }
+      { name: "The First Kiss Kit", quantity: 1, price: 34.99 },
+      { name: "Dutch Cocoa Powder", quantity: 1, price: 22.99 }
     ],
-    total: 34.99,
+    total: 57.98,
     shippingAddress: "123 Love Street, Romance City, RC 12345",
-    trackingNumber: "TRK123456789"
+    trackingNumber: "TRK123456789",
+    estimatedDelivery: "2024-11-20",
+    deliveredDate: "2024-11-19",
+    tracking: {
+      status: "delivered",
+      currentLocation: "Delivered",
+      estimatedDelivery: "2024-11-20",
+      carrier: "LovinCraft Express",
+      timeline: [
+        { status: "Order Placed", date: "2024-11-15 10:30 AM", location: "Order received", completed: true },
+        { status: "Processing", date: "2024-11-15 2:15 PM", location: "Packaging your love", completed: true },
+        { status: "Shipped", date: "2024-11-16 8:00 AM", location: "Romance City Distribution Center", completed: true },
+        { status: "In Transit", date: "2024-11-17 11:20 AM", location: "Regional Hub - Love County", completed: true },
+        { status: "Out for Delivery", date: "2024-11-19 7:30 AM", location: "Local delivery facility", completed: true },
+        { status: "Delivered", date: "2024-11-19 3:45 PM", location: "Left at front door", completed: true }
+      ]
+    }
   },
   {
     id: "ORD-2024-002",
@@ -146,7 +163,21 @@ export const mockOrders = [
     total: 98.97,
     shippingAddress: "123 Love Street, Romance City, RC 12345",
     trackingNumber: "TRK987654321",
-    estimatedDelivery: "2024-11-22"
+    estimatedDelivery: "2024-11-22",
+    tracking: {
+      status: "in_transit",
+      currentLocation: "Regional Hub - Love County",
+      estimatedDelivery: "2024-11-22",
+      carrier: "LovinCraft Express",
+      timeline: [
+        { status: "Order Placed", date: "2024-11-18 9:15 AM", location: "Order received", completed: true },
+        { status: "Processing", date: "2024-11-18 1:30 PM", location: "Packaging your love", completed: true },
+        { status: "Shipped", date: "2024-11-19 7:45 AM", location: "Romance City Distribution Center", completed: true },
+        { status: "In Transit", date: "2024-11-20 10:00 AM", location: "Regional Hub - Love County", completed: true },
+        { status: "Out for Delivery", date: "Expected 2024-11-22", location: "Arriving soon", completed: false },
+        { status: "Delivered", date: "Expected 2024-11-22", location: "Your doorstep", completed: false }
+      ]
+    }
   },
   {
     id: "ORD-2024-003",
@@ -156,7 +187,21 @@ export const mockOrders = [
       { name: "Starter Love Kit", quantity: 1, price: 29.99 }
     ],
     total: 29.99,
-    shippingAddress: "123 Love Street, Romance City, RC 12345"
+    shippingAddress: "123 Love Street, Romance City, RC 12345",
+    tracking: {
+      status: "processing",
+      currentLocation: "Packaging your love",
+      estimatedDelivery: "2024-11-25",
+      carrier: "LovinCraft Express",
+      timeline: [
+        { status: "Order Placed", date: "2024-11-20 11:00 AM", location: "Order received", completed: true },
+        { status: "Processing", date: "In progress", location: "Packaging your love", completed: false },
+        { status: "Shipped", date: "Expected 2024-11-21", location: "Will ship soon", completed: false },
+        { status: "In Transit", date: "Expected 2024-11-22", location: "On the way", completed: false },
+        { status: "Out for Delivery", date: "Expected 2024-11-25", location: "Final mile", completed: false },
+        { status: "Delivered", date: "Expected 2024-11-25", location: "Your doorstep", completed: false }
+      ]
+    }
   }
 ];
 

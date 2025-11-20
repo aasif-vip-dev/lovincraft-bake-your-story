@@ -71,7 +71,9 @@ const Dashboard = () => {
                   {order.trackingNumber && (
                     <div className="flex items-center justify-between rounded-md bg-muted p-3">
                       <span className="text-sm">Tracking: {order.trackingNumber}</span>
-                      <Button variant="link" size="sm">Track Order</Button>
+                      <Button variant="link" size="sm" asChild>
+                        <a href={`/track-order/${order.id}`}>Track Order</a>
+                      </Button>
                     </div>
                   )}
                 </CardContent>
