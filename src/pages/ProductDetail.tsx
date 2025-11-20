@@ -4,12 +4,16 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, ShoppingCart, Star, Package, Truck, Shield, BookOpen } from "lucide-react";
-import { products, reviews, recipes } from "@/data/mockData";
+import { products, reviews as mockReviews, recipes } from "@/data/mockData";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { toast } from "@/hooks/use-toast";
 import SocialShare from "@/components/SocialShare";
+import ReviewForm from "@/components/ReviewForm";
+import ReviewList from "@/components/ReviewList";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -32,7 +36,7 @@ const ProductDetail = () => {
     );
   }
 
-  const productReviews = reviews.filter(r => r.productId === product.id);
+  const productReviews = mockReviews.filter(r => r.productId === product.id);
   const productRecipe = recipes.find(r => r.productId === product.id);
 
   return (
@@ -178,32 +182,25 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Reviews */}
+        {/* Reviews & Details Tabs */}
         <section className="mt-20">
-          <h2 className="mb-8 font-serif text-3xl font-bold">Customer Reviews</h2>
-          <div className="grid gap-6">
-            {productReviews.map(review => (
-              <Card key={review.id}>
-                <CardContent className="p-6">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div>
-                      <p className="font-semibold">{review.userName}</p>
-                      <p className="text-sm text-muted-foreground">{review.date}</p>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`h-4 w-4 ${i < review.rating ? 'fill-primary text-primary' : 'text-muted'}`} />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground">{review.comment}</p>
-                  {review.verified && (
-                    <Badge variant="secondary" className="mt-4">Verified Purchase</Badge>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Tabs defaultValue="reviews" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="reviews">Customer Reviews</TabsTrigger>
+              <TabsTrigger value="write">Write a Review</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="reviews" className="mt-6">
+              <ReviewList productId={product.id} />
+            </TabsContent>
+            
+            <TabsContent value="write" className="mt-6">
+              <ReviewForm 
+                productId={product.id} 
+                productName={product.name}
+              />
+            </TabsContent>
+          </Tabs>
         </section>
       </main>
 

@@ -10,14 +10,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CreditCard, Wallet, Banknote } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useLoyalty } from "@/contexts/LoyaltyContext";
 import { toast } from "@/hooks/use-toast";
 
 const Checkout = () => {
   const { items, total, clearCart } = useCart();
+  const { addPoints, getDiscountPercentage } = useLoyalty();
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [giftWrap, setGiftWrap] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const loyaltyDiscount = getDiscountPercentage();
+  const discountAmount = (total * loyaltyDiscount) / 100;
+  const finalTotal = total - discountAmount + (giftWrap ? 5.99 : 0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,19 +32,19 @@ const Checkout = () => {
     // Simulate payment processing
     await new Promise(resolve => setTimeout(resolve, 2000));
     
+    // Award loyalty points (1 point per dollar spent)
+    const pointsEarned = Math.floor(finalTotal);
+    addPoints(pointsEarned, "purchase", `Purchase of $${finalTotal.toFixed(2)}`);
+    
     clearCart();
     toast({
-      title: "Order Placed Successfully!",
-      description: "You'll receive a confirmation email shortly.",
+      title: "Order Placed Successfully! 🎉",
+      description: `You earned ${pointsEarned} loyalty points!`,
     });
     
     navigate("/dashboard?tab=orders");
     setLoading(false);
   };
-
-  const shipping = total > 50 ? 0 : 5.99;
-  const giftWrapFee = giftWrap ? 4.99 : 0;
-  const finalTotal = total + shipping + giftWrapFee;
 
   return (
     <div className="min-h-screen bg-background">
@@ -209,14 +215,20 @@ const Checkout = () => {
                       <span className="text-muted-foreground">Subtotal</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
+                    {loyaltyDiscount > 0 && (
+                      <div className="flex justify-between text-sm text-primary">
+                        <span>Loyalty Discount ({loyaltyDiscount}%)</span>
+                        <span>-${discountAmount.toFixed(2)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Shipping</span>
-                      <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+                      <span>{total > 50 ? 'FREE' : '$5.99'}</span>
                     </div>
                     {giftWrap && (
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Gift Wrap</span>
-                        <span>${giftWrapFee.toFixed(2)}</span>
+                        <span>$5.99</span>
                       </div>
                     )}
                   </div>

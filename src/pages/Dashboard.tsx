@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Package, Heart, User, MapPin, ShoppingCart, X } from "lucide-react";
+import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift } from "lucide-react";
+import { Share2 } from "lucide-react";
 import { mockOrders } from "@/data/mockData";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
+import LoyaltyCard from "@/components/LoyaltyCard";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -29,8 +31,13 @@ const Dashboard = () => {
       <main className="container mx-auto px-4 py-12">
         <h1 className="mb-8 font-serif text-4xl font-bold">My Dashboard</h1>
 
+        {/* Loyalty Card */}
+        <div className="mb-8">
+          <LoyaltyCard />
+        </div>
+
         <Tabs defaultValue={defaultTab} className="space-y-8">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto">
             <TabsTrigger value="orders">
               <Package className="mr-2 h-4 w-4" />
               Orders
@@ -38,6 +45,10 @@ const Dashboard = () => {
             <TabsTrigger value="wishlist">
               <Heart className="mr-2 h-4 w-4" />
               Wishlist
+            </TabsTrigger>
+            <TabsTrigger value="rewards">
+              <Award className="mr-2 h-4 w-4" />
+              Rewards
             </TabsTrigger>
             <TabsTrigger value="profile">
               <User className="mr-2 h-4 w-4" />
@@ -159,6 +170,56 @@ const Dashboard = () => {
                 ))}
               </div>
             )}
+          </TabsContent>
+
+          {/* Rewards Tab */}
+          <TabsContent value="rewards">
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="mb-4 font-serif text-2xl font-bold">Loyalty Rewards Program</h3>
+                <p className="mb-6 text-muted-foreground">
+                  Earn points on every purchase, review, and social share. Unlock exclusive benefits as you climb through the tiers!
+                </p>
+                
+                <div className="mb-6">
+                  <h4 className="mb-3 font-semibold">Ways to Earn Points:</h4>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                      <ShoppingCart className="h-5 w-5 text-primary" />
+                      <div>
+                        <div className="font-semibold">Make a Purchase</div>
+                        <div className="text-sm text-muted-foreground">1 point per $1 spent</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                      <Star className="h-5 w-5 text-primary" />
+                      <div>
+                        <div className="font-semibold">Write a Review</div>
+                        <div className="text-sm text-muted-foreground">50 points per review</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                      <Share2 className="h-5 w-5 text-primary" />
+                      <div>
+                        <div className="font-semibold">Share on Social</div>
+                        <div className="text-sm text-muted-foreground">25 points per share</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                      <Gift className="h-5 w-5 text-primary" />
+                      <div>
+                        <div className="font-semibold">Birthday Bonus</div>
+                        <div className="text-sm text-muted-foreground">100 points annually</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Button asChild>
+                  <Link to="/shop">Start Shopping & Earning</Link>
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Profile Tab */}
