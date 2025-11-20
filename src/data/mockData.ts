@@ -722,4 +722,103 @@ export const blogPosts = [
   }
 ];
 
+export const faqData = [
+  {
+    category: "Ordering",
+    questions: [
+      {
+        question: "How do I place an order?",
+        answer: "Simply browse our shop, select your desired products, add them to your cart, and proceed to checkout. You can create an account or checkout as a guest. We accept multiple payment methods including credit cards, PayPal, and Stripe."
+      },
+      {
+        question: "Can I modify or cancel my order?",
+        answer: "Orders can be modified or cancelled within 2 hours of placement. Please contact our support team immediately at support@lovincraft.com or call us. Once your order enters processing, modifications may not be possible."
+      },
+      {
+        question: "Do you offer gift wrapping?",
+        answer: "Yes! We offer beautiful gift wrapping with personalized messages during checkout. Perfect for anniversaries, birthdays, or any special occasion. Gift wrapping adds $5.99 to your order."
+      },
+      {
+        question: "What payment methods do you accept?",
+        answer: "We accept all major credit and debit cards (Visa, Mastercard, American Express, Discover), PayPal, Stripe, and Cash on Delivery (COD) for eligible locations."
+      }
+    ]
+  },
+  {
+    category: "Shipping & Delivery",
+    questions: [
+      {
+        question: "What are your shipping options?",
+        answer: "We offer Standard Shipping (5-7 business days), Express Shipping (2-3 business days), and Overnight Shipping. Shipping costs vary based on your location and order weight. Free standard shipping on orders over $50!"
+      },
+      {
+        question: "How can I track my order?",
+        answer: "Once your order ships, you'll receive a tracking number via email. You can also track your order anytime from your dashboard by clicking 'Track Order' next to your order details."
+      },
+      {
+        question: "Do you ship internationally?",
+        answer: "Currently, we ship within the United States and Canada. We're working on expanding to more countries soon. Sign up for our newsletter to be notified when international shipping becomes available in your region."
+      },
+      {
+        question: "What if my order arrives damaged?",
+        answer: "We take great care in packaging all orders. If your items arrive damaged, please contact us within 48 hours with photos of the damage. We'll arrange a replacement or full refund immediately."
+      }
+    ]
+  },
+  {
+    category: "Ingredients & Products",
+    questions: [
+      {
+        question: "What is the 'Secret Love Ingredient'?",
+        answer: "Our Secret Love Ingredient is a proprietary blend inspired by Mila & Aasif's love story. While we keep the exact recipe secret, it's a carefully crafted combination of natural flavors and aromatic essences that adds warmth and depth to every cake. It's completely safe, all-natural, and what makes LovinCraft truly special."
+      },
+      {
+        question: "Are your ingredients organic and natural?",
+        answer: "Yes! We source the highest quality, natural ingredients. Our vanilla is pure Madagascar bourbon vanilla, our cocoa is premium Dutch-processed, and all our ingredients are free from artificial flavors and preservatives. Many of our products are organic-certified."
+      },
+      {
+        question: "How long do the ingredients stay fresh?",
+        answer: "All our ingredient kits have a shelf life of 12-18 months when stored in a cool, dry place. Each package includes a 'best by' date. Our extracts and sealed ingredients can last even longer. We recommend using within 6 months of opening for best flavor."
+      },
+      {
+        question: "Can I customize my ingredient kit?",
+        answer: "Absolutely! Visit our I2Card section to create your own customized ingredient kit. Select your base ingredients, choose proportions, and pick from our secret flavor blends. It's perfect for creating your unique signature cake."
+      },
+      {
+        question: "Are there allergen-free options?",
+        answer: "We clearly label all allergens on our products. While we offer gluten-free flour and dairy-free alternatives, please note that our facility processes wheat, dairy, eggs, and nuts. Contact us for specific allergen concerns."
+      }
+    ]
+  },
+  {
+    category: "Baking Tips",
+    questions: [
+      {
+        question: "I'm a beginner baker. Which kit should I start with?",
+        answer: "We recommend starting with our 'Starter Love Kit'! It includes everything you need with beginner-friendly instructions, helpful tips, and our signature secret ingredient. The recipe is forgiving and produces beautiful results every time."
+      },
+      {
+        question: "What equipment do I need to bake your kits?",
+        answer: "You'll need basic baking equipment: mixing bowls, measuring cups and spoons, a hand or stand mixer, cake pans (typically 9-inch round), and an oven. Detailed equipment lists are included with each kit and recipe."
+      },
+      {
+        question: "Can I substitute ingredients?",
+        answer: "While our kits are formulated for best results as-is, some substitutions are possible. Check our blog for substitution guides, or contact us for specific questions. Keep in mind that substitutions may affect the final taste and texture."
+      },
+      {
+        question: "How do I know when my cake is done?",
+        answer: "Insert a toothpick into the center of the cake. If it comes out clean or with just a few moist crumbs, it's done! The cake should also spring back when gently pressed, and edges will start pulling away from the pan. Each recipe includes specific baking times and visual cues."
+      },
+      {
+        question: "Do you offer video tutorials?",
+        answer: "Yes! Each recipe page includes video tutorials showing step-by-step instructions. We also share baking tips, troubleshooting guides, and special techniques on our blog and YouTube channel."
+      },
+      {
+        question: "What if my cake doesn't turn out right?",
+        answer: "Don't worry! Baking is a learning process. Check our troubleshooting guide on the blog, or reach out to our baking support team. We're here to help you succeed! Common issues like dense cakes, sunken centers, or dry texture usually have simple solutions."
+      }
+    ]
+  }
+];
+
 

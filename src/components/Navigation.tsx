@@ -25,6 +25,7 @@ const Navigation = () => {
     { name: "Custom Kit", path: "/i2card" },
     { name: "Blog", path: "/blog" },
     { name: "Our Story", path: "/story" },
+    { name: "FAQ", path: "/faq" },
     { name: "Contact", path: "/contact" },
   ];
 
