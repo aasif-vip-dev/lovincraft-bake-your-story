@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Calendar, Clock, User, ArrowLeft, Share2, Facebook, Twitter, Heart } from "lucide-react";
+import { Calendar, Clock, User, ArrowLeft, Heart } from "lucide-react";
 import { blogPosts } from "@/data/mockData";
-import { toast } from "@/hooks/use-toast";
+import SocialShare from "@/components/SocialShare";
 
 const BlogPost = () => {
   const { slug } = useParams();
@@ -31,13 +31,6 @@ const BlogPost = () => {
   const relatedPosts = blogPosts
     .filter(p => p.id !== post.id && p.category === post.category)
     .slice(0, 3);
-
-  const handleShare = (platform: string) => {
-    toast({
-      title: "Share",
-      description: `Would open ${platform} sharing dialog`,
-    });
-  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,30 +65,15 @@ const BlogPost = () => {
             </div>
           </div>
 
-          {/* Share Buttons */}
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-sm text-muted-foreground">Share:</span>
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => handleShare("Facebook")}
-            >
-              <Facebook className="h-4 w-4" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => handleShare("Twitter")}
-            >
-              <Twitter className="h-4 w-4" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => handleShare("Link")}
-            >
-              <Share2 className="h-4 w-4" />
-            </Button>
+          {/* Social Share */}
+          <div className="mb-8 flex justify-center">
+            <SocialShare
+              url={`/blog/${post.slug}`}
+              title={post.title}
+              description={post.excerpt}
+              image={post.image}
+              hashtags={["LovinCraftLove", "BakeWithLove", "BakingTips"]}
+            />
           </div>
         </div>
 

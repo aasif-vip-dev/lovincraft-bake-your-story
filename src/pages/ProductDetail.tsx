@@ -9,6 +9,7 @@ import { products, reviews, recipes } from "@/data/mockData";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { toast } from "@/hooks/use-toast";
+import SocialShare from "@/components/SocialShare";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -121,6 +122,16 @@ const ProductDetail = () => {
                   <Heart className={`h-5 w-5 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
                 </Button>
               </div>
+            </div>
+
+            {/* Social Share */}
+            <div className="border-t border-border pt-6">
+              <SocialShare
+                url={`/product/${product.id}`}
+                title={`Check out ${product.name} from LovinCraft!`}
+                description={product.description}
+                image={product.image}
+              />
             </div>
 
             {/* Features */}
