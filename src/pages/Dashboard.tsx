@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift, Ticket as TicketIcon, Plus, Edit, Trash2, Calendar, DollarSign, Activity } from "lucide-react";
+import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift, Ticket as TicketIcon, Plus, Edit, Trash2, Calendar, DollarSign, Activity, Building2 } from "lucide-react";
 import { Share2 } from "lucide-react";
 import { mockOrders } from "@/data/mockData";
 import RatingComponent from "@/components/RatingComponent";
@@ -42,10 +42,21 @@ const Dashboard = () => {
   
   // Dialog states
   const [isAddAddressOpen, setIsAddAddressOpen] = useState(false);
+  const [isEditAddressOpen, setIsEditAddressOpen] = useState(false);
+  const [editingAddress, setEditingAddress] = useState<any>(null);
   const [isEditTicketOpen, setIsEditTicketOpen] = useState(false);
   const [editingTicket, setEditingTicket] = useState<any>(null);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState("");
+  
+  // Bank withdrawal
+  const [bankDetails, setBankDetails] = useState({
+    accountHolder: "",
+    accountNumber: "",
+    bankName: "",
+    routingNumber: "",
+    accountType: "savings"
+  });
   
   // New address form
   const [newAddress, setNewAddress] = useState({
@@ -100,6 +111,22 @@ const Dashboard = () => {
     toast({ title: "Success", description: "Default address updated!" });
   };
   
+  const handleEditAddress = (address: any) => {
+    setEditingAddress({ ...address });
+    setIsEditAddressOpen(true);
+  };
+  
+  const handleUpdateAddress = () => {
+    if (!editingAddress.label || !editingAddress.address || !editingAddress.city) {
+      toast({ title: "Error", description: "Please fill in all required fields", variant: "destructive" });
+      return;
+    }
+    
+    setAddresses(addresses.map(a => a.id === editingAddress.id ? editingAddress : a));
+    setIsEditAddressOpen(false);
+    toast({ title: "Success", description: "Address updated successfully!" });
+  };
+  
   const handleCancelOrder = (orderId: string) => {
     setOrders(orders.map(o => o.id === orderId ? { ...o, status: "cancelled" } : o));
     toast({ title: "Order Cancelled", description: `Order ${orderId} has been cancelled.` });
@@ -136,12 +163,17 @@ const Dashboard = () => {
       return;
     }
     
+    if (!bankDetails.accountHolder || !bankDetails.accountNumber || !bankDetails.bankName) {
+      toast({ title: "Error", description: "Please fill in your bank details first", variant: "destructive" });
+      return;
+    }
+    
     withdrawPoints(pointsNeeded);
     setWithdrawAmount("");
     setIsWithdrawOpen(false);
     toast({ 
       title: "Withdrawal Successful!", 
-      description: `$${amount.toFixed(2)} will be credited to your account within 3-5 business days.` 
+      description: `$${amount.toFixed(2)} will be credited to ${bankDetails.bankName} account ending in ${bankDetails.accountNumber.slice(-4)} within 3-5 business days.` 
     });
   };
   
@@ -826,6 +858,13 @@ const Dashboard = () => {
                         {address.isDefault && <Badge>Default</Badge>}
                       </div>
                       <div className="flex gap-2">
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => handleEditAddress(address)}
+                        >
+                          <Edit className="h-4 w-4 text-primary" />
+                        </Button>
                         {!address.isDefault && (
                           <Button 
                             variant="outline" 
@@ -870,6 +909,240 @@ const Dashboard = () => {
           </TabsContent>
         </Tabs>
       </main>
+
+      {/* Edit Address Dialog */}
+      <Dialog open={isEditAddressOpen} onOpenChange={setIsEditAddressOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Address</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="edit-label">Label *</Label>
+              <Input
+                id="edit-label"
+                value={editingAddress?.label || ""}
+                onChange={(e) => setEditingAddress({ ...editingAddress, label: e.target.value })}
+                placeholder="e.g., Home, Office"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-address">Street Address *</Label>
+              <Input
+                id="edit-address"
+                value={editingAddress?.address || ""}
+                onChange={(e) => setEditingAddress({ ...editingAddress, address: e.target.value })}
+                placeholder="123 Love Street"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-city">City *</Label>
+                <Input
+                  id="edit-city"
+                  value={editingAddress?.city || ""}
+                  onChange={(e) => setEditingAddress({ ...editingAddress, city: e.target.value })}
+                  placeholder="Romance City"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-state">State</Label>
+                <Input
+                  id="edit-state"
+                  value={editingAddress?.state || ""}
+                  onChange={(e) => setEditingAddress({ ...editingAddress, state: e.target.value })}
+                  placeholder="RC"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="edit-zip">ZIP Code</Label>
+                <Input
+                  id="edit-zip"
+                  value={editingAddress?.zip || ""}
+                  onChange={(e) => setEditingAddress({ ...editingAddress, zip: e.target.value })}
+                  placeholder="12345"
+                />
+              </div>
+              <div>
+                <Label htmlFor="edit-country">Country</Label>
+                <Input
+                  id="edit-country"
+                  value={editingAddress?.country || ""}
+                  onChange={(e) => setEditingAddress({ ...editingAddress, country: e.target.value })}
+                />
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsEditAddressOpen(false)}>Cancel</Button>
+            <Button onClick={handleUpdateAddress}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Bank Withdrawal Dialog */}
+      <Dialog open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-primary" />
+              Withdraw to Bank Account
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            {/* Available Balance */}
+            <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
+              <CardContent className="p-4">
+                <div className="text-center">
+                  <p className="text-sm text-muted-foreground mb-1">Available Balance</p>
+                  <p className="text-3xl font-bold text-primary">${(points / 100).toFixed(2)}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{points} loyalty points</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Bank Account Details */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-sm">Bank Account Details</h3>
+              <div className="grid gap-4">
+                <div>
+                  <Label htmlFor="accountHolder">Account Holder Name *</Label>
+                  <Input
+                    id="accountHolder"
+                    value={bankDetails.accountHolder}
+                    onChange={(e) => setBankDetails({ ...bankDetails, accountHolder: e.target.value })}
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="bankName">Bank Name *</Label>
+                    <Input
+                      id="bankName"
+                      value={bankDetails.bankName}
+                      onChange={(e) => setBankDetails({ ...bankDetails, bankName: e.target.value })}
+                      placeholder="Chase Bank"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="accountType">Account Type</Label>
+                    <select 
+                      id="accountType"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      value={bankDetails.accountType}
+                      onChange={(e) => setBankDetails({ ...bankDetails, accountType: e.target.value })}
+                    >
+                      <option value="savings">Savings</option>
+                      <option value="checking">Checking</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="accountNumber">Account Number *</Label>
+                    <Input
+                      id="accountNumber"
+                      value={bankDetails.accountNumber}
+                      onChange={(e) => setBankDetails({ ...bankDetails, accountNumber: e.target.value })}
+                      placeholder="1234567890"
+                      type="password"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="routingNumber">Routing Number</Label>
+                    <Input
+                      id="routingNumber"
+                      value={bankDetails.routingNumber}
+                      onChange={(e) => setBankDetails({ ...bankDetails, routingNumber: e.target.value })}
+                      placeholder="021000021"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Withdrawal Amount */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-sm">Withdrawal Amount</h3>
+              <div>
+                <Label htmlFor="withdrawAmount">Amount (USD) *</Label>
+                <div className="relative">
+                  <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="withdrawAmount"
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    max={(points / 100).toFixed(2)}
+                    value={withdrawAmount}
+                    onChange={(e) => setWithdrawAmount(e.target.value)}
+                    placeholder="0.00"
+                    className="pl-9"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Maximum: ${(points / 100).toFixed(2)} (100 points = $1)
+                </p>
+              </div>
+              
+              {/* Quick Amount Buttons */}
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setWithdrawAmount("10")}
+                  disabled={points < 1000}
+                >
+                  $10
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setWithdrawAmount("25")}
+                  disabled={points < 2500}
+                >
+                  $25
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setWithdrawAmount("50")}
+                  disabled={points < 5000}
+                >
+                  $50
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setWithdrawAmount((points / 100).toFixed(2))}
+                >
+                  Max
+                </Button>
+              </div>
+            </div>
+
+            {/* Important Notice */}
+            <div className="rounded-lg bg-muted/50 p-4 text-sm text-muted-foreground">
+              <p className="font-semibold mb-2">Important Information:</p>
+              <ul className="space-y-1 list-disc list-inside">
+                <li>Withdrawals take 3-5 business days to process</li>
+                <li>Minimum withdrawal amount is $1.00</li>
+                <li>Bank account details are securely encrypted</li>
+                <li>You'll receive a confirmation email once processed</li>
+              </ul>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsWithdrawOpen(false)}>Cancel</Button>
+            <Button onClick={handleWithdraw} className="gap-2">
+              <DollarSign className="h-4 w-4" />
+              Withdraw ${withdrawAmount || "0.00"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
