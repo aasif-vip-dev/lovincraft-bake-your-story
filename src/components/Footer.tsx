@@ -1,5 +1,6 @@
 import { Heart, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 const Footer = () => {
   return (
@@ -60,8 +61,9 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-serif text-lg font-semibold text-foreground">Stay Connected</h3>
             <p className="text-sm text-muted-foreground">
-              Subscribe for recipes, stories, and special offers.
+              Get 15% off your first order!
             </p>
+            <NewsletterSignup variant="inline" />
           </div>
         </div>
 
