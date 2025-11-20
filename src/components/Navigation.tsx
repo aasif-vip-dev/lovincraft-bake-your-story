@@ -23,6 +23,7 @@ const Navigation = () => {
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
     { name: "Custom Kit", path: "/i2card" },
+    { name: "Blog", path: "/blog" },
     { name: "Our Story", path: "/story" },
     { name: "Contact", path: "/contact" },
   ];
