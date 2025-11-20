@@ -1,16 +1,28 @@
 import { Link } from "react-router-dom";
-import { Heart, ShoppingCart, Menu } from "lucide-react";
+import { Heart, ShoppingCart, Menu, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navigation = () => {
+  const { itemCount } = useCart();
+  const { user, logout, isAuthenticated } = useAuth();
+  
   const links = [
     { name: "Home", path: "/" },
     { name: "Shop", path: "/shop" },
+    { name: "Custom Kit", path: "/i2card" },
     { name: "Our Story", path: "/story" },
     { name: "Contact", path: "/contact" },
   ];
@@ -39,12 +51,38 @@ const Navigation = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="relative">
-            <ShoppingCart className="h-5 w-5" />
-            <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
-              0
-            </span>
+          <Button variant="ghost" size="icon" className="relative" asChild>
+            <Link to="/cart">
+              <ShoppingCart className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+                  {itemCount}
+                </span>
+              )}
+            </Link>
           </Button>
+
+          {isAuthenticated ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="hidden md:flex">
+                <Button variant="ghost" size="icon">
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard">Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={logout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="ghost" asChild className="hidden md:flex">
+              <Link to="/auth">Login</Link>
+            </Button>
+          )}
 
           {/* Mobile Menu */}
           <Sheet>
