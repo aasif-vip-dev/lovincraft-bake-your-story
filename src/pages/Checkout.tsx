@@ -11,15 +11,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CreditCard, Wallet, Banknote } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useLoyalty } from "@/contexts/LoyaltyContext";
+import { useReferral } from "@/contexts/ReferralContext";
 import { toast } from "@/hooks/use-toast";
 
 const Checkout = () => {
   const { items, total, clearCart } = useCart();
   const { addPoints, getDiscountPercentage } = useLoyalty();
+  const { completeReferral, getReferralCode } = useReferral();
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [giftWrap, setGiftWrap] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
 
   const loyaltyDiscount = getDiscountPercentage();
   const discountAmount = (total * loyaltyDiscount) / 100;
@@ -35,6 +38,17 @@ const Checkout = () => {
     // Award loyalty points (1 point per dollar spent)
     const pointsEarned = Math.floor(finalTotal);
     addPoints(pointsEarned, "purchase", `Purchase of $${finalTotal.toFixed(2)}`);
+    
+    // Check and complete referral if this is a first purchase
+    const referralCode = getReferralCode();
+    if (referralCode && email) {
+      completeReferral(email);
+      // Award bonus points to referrer
+      toast({
+        title: "Referral Bonus Applied! 🎉",
+        description: "Your friend earned 100 bonus points for referring you!",
+      });
+    }
     
     clearCart();
     toast({
@@ -76,7 +90,13 @@ const Checkout = () => {
                   
                   <div>
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" required />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required 
+                    />
                   </div>
                   
                   <div>

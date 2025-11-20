@@ -16,6 +16,7 @@ import { useWishlist } from "@/contexts/WishlistContext";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 import LoyaltyCard from "@/components/LoyaltyCard";
+import ReferralCard from "@/components/ReferralCard";
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -173,48 +174,48 @@ const Dashboard = () => {
           </TabsContent>
 
           {/* Rewards Tab */}
-          <TabsContent value="rewards">
+          <TabsContent value="rewards" className="space-y-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <LoyaltyCard />
+              <ReferralCard />
+            </div>
+            
             <Card>
-              <CardContent className="p-6">
-                <h3 className="mb-4 font-serif text-2xl font-bold">Loyalty Rewards Program</h3>
-                <p className="mb-6 text-muted-foreground">
-                  Earn points on every purchase, review, and social share. Unlock exclusive benefits as you climb through the tiers!
-                </p>
-                
-                <div className="mb-6">
-                  <h4 className="mb-3 font-semibold">Ways to Earn Points:</h4>
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
-                      <ShoppingCart className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-semibold">Make a Purchase</div>
-                        <div className="text-sm text-muted-foreground">1 point per $1 spent</div>
-                      </div>
+              <CardHeader>
+                <CardTitle>Ways to Earn Points</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid gap-3 md:grid-cols-2">
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                    <ShoppingCart className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="font-semibold">Make a Purchase</div>
+                      <div className="text-sm text-muted-foreground">1 point per $1 spent</div>
                     </div>
-                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
-                      <Star className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-semibold">Write a Review</div>
-                        <div className="text-sm text-muted-foreground">50 points per review</div>
-                      </div>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                    <Star className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="font-semibold">Write a Review</div>
+                      <div className="text-sm text-muted-foreground">50 points per review</div>
                     </div>
-                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
-                      <Share2 className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-semibold">Share on Social</div>
-                        <div className="text-sm text-muted-foreground">25 points per share</div>
-                      </div>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                    <Share2 className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="font-semibold">Share on Social</div>
+                      <div className="text-sm text-muted-foreground">25 points per share</div>
                     </div>
-                    <div className="flex items-center gap-3 rounded-lg border border-border p-3">
-                      <Gift className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-semibold">Birthday Bonus</div>
-                        <div className="text-sm text-muted-foreground">100 points annually</div>
-                      </div>
+                  </div>
+                  <div className="flex items-center gap-3 rounded-lg border border-border p-3">
+                    <Gift className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="font-semibold">Refer a Friend</div>
+                      <div className="text-sm text-muted-foreground">100 bonus points</div>
                     </div>
                   </div>
                 </div>
-
+                
                 <Button asChild>
                   <Link to="/shop">Start Shopping & Earning</Link>
                 </Button>
