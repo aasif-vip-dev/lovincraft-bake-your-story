@@ -7,10 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart, Star, Package, Truck, Shield, BookOpen } from "lucide-react";
 import { products, reviews, recipes } from "@/data/mockData";
 import { useCart } from "@/contexts/CartContext";
+import { useWishlist } from "@/contexts/WishlistContext";
+import { toast } from "@/hooks/use-toast";
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const product = products.find(p => p.id === Number(id));
 
   if (!product) {
@@ -91,8 +94,31 @@ const ProductDetail = () => {
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Add to Cart
                 </Button>
-                <Button variant="outline" size="lg">
-                  <Heart className="h-5 w-5" />
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className={
+                    isInWishlist(product.id) 
+                      ? 'bg-primary/10 text-primary hover:bg-primary/20' 
+                      : ''
+                  }
+                  onClick={() => {
+                    toggleWishlist({ 
+                      id: product.id, 
+                      name: product.name, 
+                      price: product.price, 
+                      image: product.image,
+                      description: product.description 
+                    });
+                    toast({
+                      title: isInWishlist(product.id) ? "Removed from wishlist" : "Added to wishlist",
+                      description: isInWishlist(product.id) 
+                        ? `${product.name} has been removed from your wishlist.`
+                        : `${product.name} has been added to your wishlist.`,
+                    });
+                  }}
+                >
+                  <Heart className={`h-5 w-5 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
                 </Button>
               </div>
             </div>
