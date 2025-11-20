@@ -13,6 +13,7 @@ import Checkout from "./pages/Checkout";
 import I2Card from "./pages/I2Card";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import Recipe from "./pages/Recipe";
 import Story from "./pages/Story";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/i2card" element={<I2Card />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/recipe/:id" element={<Recipe />} />
               <Route path="/story" element={<Story />} />
               <Route path="/contact" element={<Contact />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
