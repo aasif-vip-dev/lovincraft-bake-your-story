@@ -23,8 +23,10 @@ interface Transaction {
 
 interface LoyaltyContextType {
   userPoints: LoyaltyPoints | null;
+  points: number;
   transactions: Transaction[];
   addPoints: (points: number, type: Transaction["type"], description: string) => void;
+  withdrawPoints: (points: number) => void;
   getTierBenefits: (tier: RewardTier) => TierBenefits;
   getDiscountPercentage: () => number;
 }
@@ -127,6 +129,25 @@ export const LoyaltyProvider: React.FC<{ children: React.ReactNode; userId?: str
     setTransactions(prev => [transaction, ...prev]);
   };
 
+  const withdrawPoints = (points: number) => {
+    setUserPoints(prev => {
+      if (!prev) return null;
+      const newPoints = Math.max(0, prev.points - points);
+      const newTier = calculateTier(newPoints);
+      return { ...prev, points: newPoints, tier: newTier };
+    });
+
+    const transaction: Transaction = {
+      id: `trans-${Date.now()}`,
+      userId,
+      points: -points,
+      type: "purchase",
+      description: `Withdrawal: $${(points / 100).toFixed(2)}`,
+      date: new Date().toISOString(),
+    };
+    setTransactions(prev => [transaction, ...prev]);
+  };
+
   const getTierBenefits = (tier: RewardTier): TierBenefits => {
     return tierThresholds[tier];
   };
@@ -139,8 +160,10 @@ export const LoyaltyProvider: React.FC<{ children: React.ReactNode; userId?: str
     <LoyaltyContext.Provider
       value={{
         userPoints,
+        points: userPoints?.points || 0,
         transactions,
         addPoints,
+        withdrawPoints,
         getTierBenefits,
         getDiscountPercentage,
       }}

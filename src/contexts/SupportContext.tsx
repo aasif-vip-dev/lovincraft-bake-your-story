@@ -14,7 +14,7 @@ interface Ticket {
   subject: string;
   description: string;
   email: string;
-  status: "open" | "in-progress" | "resolved";
+  status: "open" | "in-progress" | "resolved" | "cancelled";
   messages: Message[];
   createdAt: string;
   updatedAt: string;
