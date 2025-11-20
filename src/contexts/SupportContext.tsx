@@ -5,6 +5,8 @@ interface Message {
   text: string;
   sender: "user" | "bot";
   timestamp: string;
+  rating?: number;
+  ratingFeedback?: string;
 }
 
 interface Ticket {
@@ -16,6 +18,8 @@ interface Ticket {
   messages: Message[];
   createdAt: string;
   updatedAt: string;
+  rating?: number;
+  ratingFeedback?: string;
 }
 
 interface SupportContextType {
@@ -24,6 +28,8 @@ interface SupportContextType {
   updateTicket: (ticketId: string, updates: Partial<Ticket>) => void;
   getTicket: (ticketId: string) => Ticket | undefined;
   addMessageToTicket: (ticketId: string, message: Omit<Message, "id" | "timestamp">) => void;
+  rateTicket: (ticketId: string, rating: number, feedback?: string) => void;
+  rateMessage: (ticketId: string, messageId: string, rating: number, feedback?: string) => void;
 }
 
 const SupportContext = createContext<SupportContextType | undefined>(undefined);
@@ -87,6 +93,39 @@ export const SupportProvider: React.FC<{ children: React.ReactNode }> = ({ child
     );
   };
 
+  const rateTicket = (ticketId: string, rating: number, feedback?: string) => {
+    setTickets(prev =>
+      prev.map(ticket =>
+        ticket.id === ticketId
+          ? { 
+              ...ticket, 
+              rating, 
+              ratingFeedback: feedback,
+              updatedAt: new Date().toISOString() 
+            }
+          : ticket
+      )
+    );
+  };
+
+  const rateMessage = (ticketId: string, messageId: string, rating: number, feedback?: string) => {
+    setTickets(prev =>
+      prev.map(ticket =>
+        ticket.id === ticketId
+          ? {
+              ...ticket,
+              messages: ticket.messages.map(msg =>
+                msg.id === messageId
+                  ? { ...msg, rating, ratingFeedback: feedback }
+                  : msg
+              ),
+              updatedAt: new Date().toISOString(),
+            }
+          : ticket
+      )
+    );
+  };
+
   return (
     <SupportContext.Provider
       value={{
@@ -95,6 +134,8 @@ export const SupportProvider: React.FC<{ children: React.ReactNode }> = ({ child
         updateTicket,
         getTicket,
         addMessageToTicket,
+        rateTicket,
+        rateMessage,
       }}
     >
       {children}
