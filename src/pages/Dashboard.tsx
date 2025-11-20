@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift, Ticket as TicketIcon, Plus, Edit, Trash2, Calendar, DollarSign, Activity, Building2 } from "lucide-react";
+import { Package, Heart, User, MapPin, ShoppingCart, X, Award, Star, Gift, Ticket as TicketIcon, Plus, Edit, Trash2, Calendar, DollarSign, Activity, Building2, CreditCard, Settings, Download, Filter, Bell } from "lucide-react";
 import { Share2 } from "lucide-react";
 import { mockOrders } from "@/data/mockData";
 import RatingComponent from "@/components/RatingComponent";
@@ -29,7 +29,7 @@ const Dashboard = () => {
   const { wishlist, removeFromWishlist } = useWishlist();
   const { addToCart } = useCart();
   const { tickets, rateTicket } = useSupport();
-  const { points, withdrawPoints } = useLoyalty();
+  const { points, withdrawPoints, transactions, addPoints } = useLoyalty();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") || "profile";
   
@@ -40,6 +40,29 @@ const Dashboard = () => {
   const [orders, setOrders] = useState(mockOrders);
   const [localTickets, setLocalTickets] = useState(tickets);
   
+  // Payment methods
+  const [paymentMethods, setPaymentMethods] = useState([
+    { id: 1, type: "card", last4: "4242", brand: "Visa", expiryMonth: 12, expiryYear: 2025, isDefault: true },
+    { id: 2, type: "card", last4: "5555", brand: "Mastercard", expiryMonth: 6, expiryYear: 2026, isDefault: false },
+    { id: 3, type: "paypal", email: "user@example.com", isDefault: false }
+  ]);
+  
+  // Transaction filters
+  const [transactionFilter, setTransactionFilter] = useState("all");
+  const [transactionSearch, setTransactionSearch] = useState("");
+  
+  // Email notification settings
+  const [emailNotifications, setEmailNotifications] = useState({
+    orderConfirmation: true,
+    orderShipped: true,
+    orderDelivered: true,
+    promotions: true,
+    newsletter: true,
+    loyaltyRewards: true,
+    productReviews: false,
+    ticketUpdates: true
+  });
+  
   // Dialog states
   const [isAddAddressOpen, setIsAddAddressOpen] = useState(false);
   const [isEditAddressOpen, setIsEditAddressOpen] = useState(false);
@@ -48,6 +71,8 @@ const Dashboard = () => {
   const [editingTicket, setEditingTicket] = useState<any>(null);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [isAddPaymentOpen, setIsAddPaymentOpen] = useState(false);
+  const [newPaymentType, setNewPaymentType] = useState<"card" | "paypal">("card");
   
   // Bank withdrawal
   const [bankDetails, setBankDetails] = useState({
@@ -56,6 +81,16 @@ const Dashboard = () => {
     bankName: "",
     routingNumber: "",
     accountType: "savings"
+  });
+  
+  // New payment method
+  const [newPayment, setNewPayment] = useState({
+    cardNumber: "",
+    cardName: "",
+    expiryMonth: "",
+    expiryYear: "",
+    cvv: "",
+    paypalEmail: ""
   });
   
   // New address form
@@ -180,6 +215,104 @@ const Dashboard = () => {
   const handleSaveProfile = () => {
     toast({ title: "Profile Updated", description: "Your profile has been saved successfully!" });
   };
+  
+  const handleAddPaymentMethod = () => {
+    if (newPaymentType === "card") {
+      if (!newPayment.cardNumber || !newPayment.cardName || !newPayment.expiryMonth || !newPayment.expiryYear) {
+        toast({ title: "Error", description: "Please fill in all card details", variant: "destructive" });
+        return;
+      }
+      
+      const newCard = {
+        id: paymentMethods.length + 1,
+        type: "card" as const,
+        last4: newPayment.cardNumber.slice(-4),
+        brand: "Visa",
+        expiryMonth: parseInt(newPayment.expiryMonth),
+        expiryYear: parseInt(newPayment.expiryYear),
+        isDefault: paymentMethods.length === 0
+      };
+      setPaymentMethods([...paymentMethods, newCard]);
+    } else {
+      if (!newPayment.paypalEmail) {
+        toast({ title: "Error", description: "Please enter PayPal email", variant: "destructive" });
+        return;
+      }
+      
+      const newPaypal = {
+        id: paymentMethods.length + 1,
+        type: "paypal" as const,
+        email: newPayment.paypalEmail,
+        isDefault: paymentMethods.length === 0
+      };
+      setPaymentMethods([...paymentMethods, newPaypal]);
+    }
+    
+    setNewPayment({ cardNumber: "", cardName: "", expiryMonth: "", expiryYear: "", cvv: "", paypalEmail: "" });
+    setIsAddPaymentOpen(false);
+    toast({ title: "Success", description: "Payment method added successfully!" });
+  };
+  
+  const handleDeletePaymentMethod = (id: number) => {
+    setPaymentMethods(paymentMethods.filter(pm => pm.id !== id));
+    toast({ title: "Success", description: "Payment method removed!" });
+  };
+  
+  const handleSetDefaultPayment = (id: number) => {
+    setPaymentMethods(paymentMethods.map(pm => ({ ...pm, isDefault: pm.id === id })));
+    toast({ title: "Success", description: "Default payment method updated!" });
+  };
+  
+  const handleExportTransactions = () => {
+    const csv = [
+      ["Date", "Type", "Description", "Points", "Amount"],
+      ...filteredTransactions.map(t => [
+        new Date(t.date).toLocaleDateString(),
+        t.type,
+        t.description,
+        t.points,
+        `$${(Math.abs(t.points) / 100).toFixed(2)}`
+      ])
+    ].map(row => row.join(",")).join("\n");
+    
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `transactions-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    toast({ title: "Success", description: "Transactions exported!" });
+  };
+  
+  const handleSaveNotifications = () => {
+    toast({ title: "Settings Saved", description: "Email notification preferences updated!" });
+  };
+  
+  const handleGenerateSampleData = () => {
+    // Add sample transactions
+    const sampleTransactions = [
+      { points: 500, type: "purchase" as const, description: "Anniversary Cake Kit Purchase - Order #12345" },
+      { points: 50, type: "review" as const, description: "Product Review: Vanilla Extract Set" },
+      { points: 25, type: "share" as const, description: "Shared Recipe on Facebook" },
+      { points: 200, type: "purchase" as const, description: "Birthday Special Kit - Order #12346" },
+      { points: 100, type: "birthday" as const, description: "Birthday Bonus Points" },
+      { points: 50, type: "review" as const, description: "Product Review: Secret Love Blend" },
+      { points: 25, type: "share" as const, description: "Shared on Instagram" },
+      { points: 350, type: "purchase" as const, description: "Premium Ingredients Kit - Order #12347" }
+    ];
+    
+    sampleTransactions.forEach(t => {
+      addPoints(t.points, t.type, t.description);
+    });
+    
+    toast({ title: "Sample Data Generated!", description: "Added 8 sample transactions with points" });
+  };
+  
+  const filteredTransactions = transactions.filter(t => {
+    if (transactionFilter !== "all" && t.type !== transactionFilter) return false;
+    if (transactionSearch && !t.description.toLowerCase().includes(transactionSearch.toLowerCase())) return false;
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -187,7 +320,7 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue={defaultTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 gap-2 h-auto bg-muted/50 p-2 rounded-lg">
+          <TabsList className="grid w-full grid-cols-3 md:grid-cols-9 gap-2 h-auto bg-muted/50 p-2 rounded-lg">
             <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <User className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Profile</span>
@@ -204,6 +337,14 @@ const Dashboard = () => {
               <Award className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Rewards</span>
             </TabsTrigger>
+            <TabsTrigger value="transactions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Activity className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">History</span>
+            </TabsTrigger>
+            <TabsTrigger value="payments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <CreditCard className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Payments</span>
+            </TabsTrigger>
             <TabsTrigger value="tickets" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <TicketIcon className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Tickets</span>
@@ -211,6 +352,10 @@ const Dashboard = () => {
             <TabsTrigger value="addresses" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <MapPin className="mr-2 h-4 w-4" />
               <span className="hidden sm:inline">Addresses</span>
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Settings className="mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Settings</span>
             </TabsTrigger>
           </TabsList>
 
@@ -904,6 +1049,408 @@ const Dashboard = () => {
                     </p>
                   </div>
                 ))}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Transaction History Tab */}
+          <TabsContent value="transactions" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <CardTitle className="flex items-center gap-2">
+                    <Activity className="h-5 w-5 text-primary" />
+                    Transaction History
+                  </CardTitle>
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={handleGenerateSampleData} size="sm">
+                      <Plus className="mr-2 h-4 w-4" />
+                      Add Sample Data
+                    </Button>
+                    <Button variant="outline" onClick={handleExportTransactions} size="sm">
+                      <Download className="mr-2 h-4 w-4" />
+                      Export CSV
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Filters */}
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1">
+                    <Label htmlFor="search">Search</Label>
+                    <Input
+                      id="search"
+                      placeholder="Search transactions..."
+                      value={transactionSearch}
+                      onChange={(e) => setTransactionSearch(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full md:w-48">
+                    <Label htmlFor="filter">Filter by Type</Label>
+                    <select
+                      id="filter"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      value={transactionFilter}
+                      onChange={(e) => setTransactionFilter(e.target.value)}
+                    >
+                      <option value="all">All Types</option>
+                      <option value="purchase">Purchases</option>
+                      <option value="review">Reviews</option>
+                      <option value="share">Social Shares</option>
+                      <option value="signup">Sign Up Bonus</option>
+                      <option value="birthday">Birthday Bonus</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Transaction List */}
+                {filteredTransactions.length === 0 ? (
+                  <div className="text-center py-12 text-muted-foreground">
+                    <Activity className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No transactions found</p>
+                    <Button variant="outline" onClick={handleGenerateSampleData} className="mt-4">
+                      Generate Sample Data
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {filteredTransactions.map((transaction) => (
+                      <div key={transaction.id} className="rounded-lg border border-border p-4 hover:bg-muted/50 transition-colors">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-1">
+                              {transaction.type === "purchase" && <ShoppingCart className="h-4 w-4 text-primary" />}
+                              {transaction.type === "review" && <Star className="h-4 w-4 text-yellow-500" />}
+                              {transaction.type === "share" && <Share2 className="h-4 w-4 text-blue-500" />}
+                              {transaction.type === "signup" && <Gift className="h-4 w-4 text-green-500" />}
+                              {transaction.type === "birthday" && <Gift className="h-4 w-4 text-pink-500" />}
+                              <span className="font-medium capitalize">{transaction.type}</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground">{transaction.description}</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {new Date(transaction.date).toLocaleDateString()} at {new Date(transaction.date).toLocaleTimeString()}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className={`font-bold ${transaction.points > 0 ? "text-green-600" : "text-red-600"}`}>
+                              {transaction.points > 0 ? "+" : ""}{transaction.points} pts
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              ${(Math.abs(transaction.points) / 100).toFixed(2)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Payment Methods Tab */}
+          <TabsContent value="payments">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <CreditCard className="h-5 w-5 text-primary" />
+                    Payment Methods
+                  </CardTitle>
+                  <Dialog open={isAddPaymentOpen} onOpenChange={setIsAddPaymentOpen}>
+                    <DialogTrigger asChild>
+                      <Button>
+                        <Plus className="mr-2 h-4 w-4" />
+                        Add Payment Method
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add Payment Method</DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <Label>Payment Type</Label>
+                          <div className="flex gap-2 mt-2">
+                            <Button
+                              variant={newPaymentType === "card" ? "default" : "outline"}
+                              onClick={() => setNewPaymentType("card")}
+                              className="flex-1"
+                            >
+                              <CreditCard className="mr-2 h-4 w-4" />
+                              Card
+                            </Button>
+                            <Button
+                              variant={newPaymentType === "paypal" ? "default" : "outline"}
+                              onClick={() => setNewPaymentType("paypal")}
+                              className="flex-1"
+                            >
+                              PayPal
+                            </Button>
+                          </div>
+                        </div>
+
+                        {newPaymentType === "card" ? (
+                          <>
+                            <div>
+                              <Label htmlFor="cardName">Cardholder Name *</Label>
+                              <Input
+                                id="cardName"
+                                value={newPayment.cardName}
+                                onChange={(e) => setNewPayment({ ...newPayment, cardName: e.target.value })}
+                                placeholder="John Doe"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="cardNumber">Card Number *</Label>
+                              <Input
+                                id="cardNumber"
+                                value={newPayment.cardNumber}
+                                onChange={(e) => setNewPayment({ ...newPayment, cardNumber: e.target.value })}
+                                placeholder="1234 5678 9012 3456"
+                                maxLength={16}
+                              />
+                            </div>
+                            <div className="grid grid-cols-3 gap-4">
+                              <div>
+                                <Label htmlFor="expiryMonth">Month *</Label>
+                                <Input
+                                  id="expiryMonth"
+                                  value={newPayment.expiryMonth}
+                                  onChange={(e) => setNewPayment({ ...newPayment, expiryMonth: e.target.value })}
+                                  placeholder="MM"
+                                  maxLength={2}
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="expiryYear">Year *</Label>
+                                <Input
+                                  id="expiryYear"
+                                  value={newPayment.expiryYear}
+                                  onChange={(e) => setNewPayment({ ...newPayment, expiryYear: e.target.value })}
+                                  placeholder="YYYY"
+                                  maxLength={4}
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="cvv">CVV *</Label>
+                                <Input
+                                  id="cvv"
+                                  value={newPayment.cvv}
+                                  onChange={(e) => setNewPayment({ ...newPayment, cvv: e.target.value })}
+                                  placeholder="123"
+                                  maxLength={3}
+                                  type="password"
+                                />
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div>
+                            <Label htmlFor="paypalEmail">PayPal Email *</Label>
+                            <Input
+                              id="paypalEmail"
+                              type="email"
+                              value={newPayment.paypalEmail}
+                              onChange={(e) => setNewPayment({ ...newPayment, paypalEmail: e.target.value })}
+                              placeholder="user@example.com"
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <DialogFooter>
+                        <Button variant="outline" onClick={() => setIsAddPaymentOpen(false)}>Cancel</Button>
+                        <Button onClick={handleAddPaymentMethod}>Add Payment</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {paymentMethods.map((payment) => (
+                  <div key={payment.id} className="rounded-lg border border-border p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                          <CreditCard className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                          {payment.type === "card" ? (
+                            <>
+                              <p className="font-semibold">{payment.brand} •••• {payment.last4}</p>
+                              <p className="text-sm text-muted-foreground">
+                                Expires {payment.expiryMonth}/{payment.expiryYear}
+                              </p>
+                            </>
+                          ) : (
+                            <>
+                              <p className="font-semibold">PayPal</p>
+                              <p className="text-sm text-muted-foreground">{payment.email}</p>
+                            </>
+                          )}
+                          {payment.isDefault && <Badge className="mt-1">Default</Badge>}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        {!payment.isDefault && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleSetDefaultPayment(payment.id)}
+                          >
+                            Set Default
+                          </Button>
+                        )}
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>Remove Payment Method?</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to remove this payment method?
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleDeletePaymentMethod(payment.id)}>
+                                Remove
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Settings Tab - Email Notifications */}
+          <TabsContent value="settings">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Bell className="h-5 w-5 text-primary" />
+                  Email Notification Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between py-3 border-b border-border">
+                    <div>
+                      <p className="font-medium">Order Confirmation</p>
+                      <p className="text-sm text-muted-foreground">Receive email when order is placed</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.orderConfirmation}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, orderConfirmation: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-3 border-b border-border">
+                    <div>
+                      <p className="font-medium">Order Shipped</p>
+                      <p className="text-sm text-muted-foreground">Get notified when your order ships</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.orderShipped}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, orderShipped: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-3 border-b border-border">
+                    <div>
+                      <p className="font-medium">Order Delivered</p>
+                      <p className="text-sm text-muted-foreground">Confirmation when order arrives</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.orderDelivered}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, orderDelivered: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-3 border-b border-border">
+                    <div>
+                      <p className="font-medium">Promotions & Deals</p>
+                      <p className="text-sm text-muted-foreground">Special offers and discount codes</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.promotions}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, promotions: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-3 border-b border-border">
+                    <div>
+                      <p className="font-medium">Newsletter</p>
+                      <p className="text-sm text-muted-foreground">Weekly baking tips and recipes</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.newsletter}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, newsletter: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-3 border-b border-border">
+                    <div>
+                      <p className="font-medium">Loyalty Rewards</p>
+                      <p className="text-sm text-muted-foreground">Points earned and tier upgrades</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.loyaltyRewards}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, loyaltyRewards: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-3 border-b border-border">
+                    <div>
+                      <p className="font-medium">Product Reviews</p>
+                      <p className="text-sm text-muted-foreground">Reminders to review purchased products</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.productReviews}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, productReviews: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between py-3">
+                    <div>
+                      <p className="font-medium">Support Ticket Updates</p>
+                      <p className="text-sm text-muted-foreground">Status changes on your support tickets</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={emailNotifications.ticketUpdates}
+                      onChange={(e) => setEmailNotifications({ ...emailNotifications, ticketUpdates: e.target.checked })}
+                      className="h-4 w-4"
+                    />
+                  </div>
+                </div>
+                
+                <Button onClick={handleSaveNotifications} className="w-full md:w-auto">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Save Notification Settings
+                </Button>
               </CardContent>
             </Card>
           </TabsContent>
