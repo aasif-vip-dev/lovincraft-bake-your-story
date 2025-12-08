@@ -11,6 +11,8 @@ import { GiftRegistryProvider } from "@/contexts/GiftRegistryContext";
 import { LoyaltyProvider } from "@/contexts/LoyaltyContext";
 import { ReferralProvider } from "@/contexts/ReferralContext";
 import { SupportProvider } from "@/contexts/SupportContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import ChatWidget from "@/components/ChatWidget";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
@@ -34,49 +36,53 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <LoyaltyProvider>
-        <ReferralProvider>
-          <SupportProvider>
-            <CartProvider>
-              <WishlistProvider>
-                <ReviewProvider>
-                  <GiftRegistryProvider>
-                    <TooltipProvider>
-                      <Toaster />
-                      <Sonner />
-                      <BrowserRouter>
-                        <Routes>
-                          <Route path="/" element={<Index />} />
-                          <Route path="/shop" element={<Shop />} />
-                          <Route path="/product/:id" element={<ProductDetail />} />
-                          <Route path="/cart" element={<Cart />} />
-                          <Route path="/checkout" element={<Checkout />} />
-                          <Route path="/i2card" element={<I2Card />} />
-                          <Route path="/auth" element={<Auth />} />
-                          <Route path="/dashboard" element={<Dashboard />} />
-                          <Route path="/recipe/:id" element={<Recipe />} />
-                          <Route path="/blog" element={<Blog />} />
-                          <Route path="/blog/:slug" element={<BlogPost />} />
-                          <Route path="/track-order/:orderId" element={<TrackOrder />} />
-                          <Route path="/faq" element={<FAQ />} />
-                          <Route path="/registry" element={<GiftRegistry />} />
-                          <Route path="/story" element={<Story />} />
-                          <Route path="/contact" element={<Contact />} />
-                          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                          <Route path="*" element={<NotFound />} />
-                        </Routes>
-                        <ChatWidget />
-                      </BrowserRouter>
-                    </TooltipProvider>
-                  </GiftRegistryProvider>
-                </ReviewProvider>
-              </WishlistProvider>
-            </CartProvider>
-          </SupportProvider>
-        </ReferralProvider>
-      </LoyaltyProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <LoyaltyProvider>
+            <ReferralProvider>
+              <SupportProvider>
+                <CartProvider>
+                  <WishlistProvider>
+                    <ReviewProvider>
+                      <GiftRegistryProvider>
+                        <TooltipProvider>
+                          <Toaster />
+                          <Sonner />
+                          <BrowserRouter>
+                            <Routes>
+                              <Route path="/" element={<Index />} />
+                              <Route path="/shop" element={<Shop />} />
+                              <Route path="/product/:id" element={<ProductDetail />} />
+                              <Route path="/cart" element={<Cart />} />
+                              <Route path="/checkout" element={<Checkout />} />
+                              <Route path="/i2card" element={<I2Card />} />
+                              <Route path="/auth" element={<Auth />} />
+                              <Route path="/dashboard" element={<Dashboard />} />
+                              <Route path="/recipe/:id" element={<Recipe />} />
+                              <Route path="/blog" element={<Blog />} />
+                              <Route path="/blog/:slug" element={<BlogPost />} />
+                              <Route path="/track-order/:orderId" element={<TrackOrder />} />
+                              <Route path="/faq" element={<FAQ />} />
+                              <Route path="/registry" element={<GiftRegistry />} />
+                              <Route path="/story" element={<Story />} />
+                              <Route path="/contact" element={<Contact />} />
+                              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                              <Route path="*" element={<NotFound />} />
+                            </Routes>
+                            <ChatWidget />
+                          </BrowserRouter>
+                        </TooltipProvider>
+                      </GiftRegistryProvider>
+                    </ReviewProvider>
+                  </WishlistProvider>
+                </CartProvider>
+              </SupportProvider>
+            </ReferralProvider>
+          </LoyaltyProvider>
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Heart, ShoppingCart, Menu, User } from "lucide-react";
+import { Heart, ShoppingCart, Menu, User, Moon, Sun, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -14,21 +14,28 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Language, languageNames } from "@/i18n";
 
 const Navigation = () => {
   const { itemCount } = useCart();
   const { user, logout, isAuthenticated } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const { language, setLanguage, t } = useLanguage();
   
   const links = [
-    { name: "Home", path: "/" },
-    { name: "Shop", path: "/shop" },
-    { name: "Custom Kit", path: "/i2card" },
-    { name: "Gift Registry", path: "/registry" },
-    { name: "Blog", path: "/blog" },
-    { name: "Our Story", path: "/story" },
-    { name: "FAQ", path: "/faq" },
-    { name: "Contact", path: "/contact" },
+    { name: t.nav.home, path: "/" },
+    { name: t.nav.shop, path: "/shop" },
+    { name: t.nav.customKit, path: "/i2card" },
+    { name: t.nav.giftRegistry, path: "/registry" },
+    { name: t.nav.blog, path: "/blog" },
+    { name: t.nav.ourStory, path: "/story" },
+    { name: t.nav.faq, path: "/faq" },
+    { name: t.nav.contact, path: "/contact" },
   ];
+
+  const languages: Language[] = ['en-US', 'en-GB', 'ta', 'ar', 'zh', 'ja', 'de', 'ko', 'hi'];
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -36,12 +43,12 @@ const Navigation = () => {
         <Link to="/" className="flex items-center gap-2">
           <Heart className="h-6 w-6 fill-primary text-primary" />
           <span className="font-serif text-2xl font-semibold text-foreground">
-            lovrebo
+            {t.common.brandName}
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-6 lg:flex">
           {links.map((link) => (
             <Link
               key={link.path}
@@ -53,7 +60,36 @@ const Navigation = () => {
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          {/* Language Selector */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Globe className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="max-h-80 overflow-y-auto">
+              {languages.map((lang) => (
+                <DropdownMenuItem
+                  key={lang}
+                  onClick={() => setLanguage(lang)}
+                  className={language === lang ? 'bg-primary/10' : ''}
+                >
+                  {languageNames[lang]}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Dark Mode Toggle */}
+          <Button variant="ghost" size="icon" onClick={toggleTheme}>
+            {theme === 'dark' ? (
+              <Sun className="h-5 w-5" />
+            ) : (
+              <Moon className="h-5 w-5" />
+            )}
+          </Button>
+
           <Button variant="ghost" size="icon" className="relative" asChild>
             <Link to="/cart">
               <ShoppingCart className="h-5 w-5" />
@@ -74,22 +110,22 @@ const Navigation = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link to="/dashboard">Dashboard</Link>
+                  <Link to="/dashboard">{t.nav.dashboard}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={logout}>
-                  Logout
+                  {t.nav.logout}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button variant="ghost" asChild className="hidden md:flex">
-              <Link to="/auth">Login</Link>
+              <Link to="/auth">{t.nav.login}</Link>
             </Button>
           )}
 
           {/* Mobile Menu */}
           <Sheet>
-            <SheetTrigger asChild className="md:hidden">
+            <SheetTrigger asChild className="lg:hidden">
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
               </Button>
