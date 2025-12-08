@@ -32,7 +32,7 @@ const ReferralCard = () => {
   };
 
   const shareOnSocial = (platform: string) => {
-    const text = `Join me on LovinCraft and get started with amazing baking ingredients! Use my referral code: ${referralCode}`;
+    const text = `Join me on lovrebo and get started with amazing baking ingredients! Use my referral code: ${referralCode}`;
     const encodedText = encodeURIComponent(text);
     const encodedUrl = encodeURIComponent(referralLink);
 

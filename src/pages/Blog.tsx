@@ -17,7 +17,7 @@ const Blog = () => {
         {/* Hero Section */}
         <div className="mb-16 text-center">
           <h1 className="mb-4 font-serif text-5xl font-bold text-foreground">
-            The LovinCraft Blog
+            The lovrebo Blog
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
             Baking tips, gift ideas, love stories, and everything in between. 

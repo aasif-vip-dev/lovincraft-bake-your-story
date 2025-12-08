@@ -101,7 +101,7 @@ const Contact = () => {
                     <div>
                       <h3 className="mb-1 font-semibold text-foreground">Email Us</h3>
                       <p className="text-sm text-muted-foreground">
-                        hello@lovincraft.com
+                        hello@lovrebo.com
                       </p>
                       <p className="text-sm text-muted-foreground">
                         We typically respond within 24 hours

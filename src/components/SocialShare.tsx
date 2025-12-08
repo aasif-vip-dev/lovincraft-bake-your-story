@@ -21,7 +21,7 @@ const SocialShare = ({
   title, 
   description = "",
   image = "",
-  hashtags = ["LovinCraftLove", "BakeWithLove"],
+  hashtags = ["lovreboLove", "BakeWithLove"],
   variant = "default"
 }: SocialShareProps) => {
   const fullUrl = `${window.location.origin}${url}`;

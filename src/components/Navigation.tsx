@@ -36,7 +36,7 @@ const Navigation = () => {
         <Link to="/" className="flex items-center gap-2">
           <Heart className="h-6 w-6 fill-primary text-primary" />
           <span className="font-serif text-2xl font-semibold text-foreground">
-            LovinCraft
+            lovrebo
           </span>
         </Link>
 

@@ -27,7 +27,7 @@ const ChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
-      text: "Hi! Welcome to LovinCraft Support! 💕 How can I help you today?",
+      text: "Hi! Welcome to lovrebo Support! 💕 How can I help you today?",
       sender: "bot",
       timestamp: new Date().toISOString(),
     },
@@ -203,7 +203,7 @@ const ChatWidget = () => {
         <div className="flex items-center gap-2">
           <img src={loveLogo} alt="Support" className="h-8 w-8" />
           <div>
-            <CardTitle className="text-lg">LovinCraft Support</CardTitle>
+            <CardTitle className="text-lg">lovrebo Support</CardTitle>
             <Badge variant="secondary" className="mt-1">
               <span className="mr-1 h-2 w-2 rounded-full bg-green-500"></span>
               Online
