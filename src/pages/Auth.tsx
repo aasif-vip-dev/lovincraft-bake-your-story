@@ -65,7 +65,7 @@ const Auth = () => {
       <main className="container mx-auto px-4 py-12">
         <Card className="mx-auto max-w-md">
           <CardHeader>
-            <CardTitle className="text-center font-serif text-3xl">Welcome to LovinCraft</CardTitle>
+            <CardTitle className="text-center font-serif text-3xl">Welcome to lovrebo</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">

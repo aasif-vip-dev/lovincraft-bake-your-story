@@ -35,12 +35,12 @@ const GiftRegistryContext = createContext<GiftRegistryContextType | undefined>(u
 
 export const GiftRegistryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [registries, setRegistries] = useState<GiftRegistry[]>(() => {
-    const saved = localStorage.getItem("lovincraft-registries");
+    const saved = localStorage.getItem("lovrebo-registries");
     return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
-    localStorage.setItem("lovincraft-registries", JSON.stringify(registries));
+    localStorage.setItem("lovrebo-registries", JSON.stringify(registries));
   }, [registries]);
 
   const generateShareCode = () => {

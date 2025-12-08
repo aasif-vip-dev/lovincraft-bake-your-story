@@ -141,7 +141,7 @@ export const mockOrders = [
       status: "delivered",
       currentLocation: "Delivered",
       estimatedDelivery: "2024-11-20",
-      carrier: "LovinCraft Express",
+      carrier: "lovrebo Express",
       timeline: [
         { status: "Order Placed", date: "2024-11-15 10:30 AM", location: "Order received", completed: true },
         { status: "Processing", date: "2024-11-15 2:15 PM", location: "Packaging your love", completed: true },
@@ -168,7 +168,7 @@ export const mockOrders = [
       status: "in_transit",
       currentLocation: "Regional Hub - Love County",
       estimatedDelivery: "2024-11-22",
-      carrier: "LovinCraft Express",
+      carrier: "lovrebo Express",
       timeline: [
         { status: "Order Placed", date: "2024-11-18 9:15 AM", location: "Order received", completed: true },
         { status: "Processing", date: "2024-11-18 1:30 PM", location: "Packaging your love", completed: true },
@@ -192,7 +192,7 @@ export const mockOrders = [
       status: "processing",
       currentLocation: "Packaging your love",
       estimatedDelivery: "2024-11-25",
-      carrier: "LovinCraft Express",
+      carrier: "lovrebo Express",
       timeline: [
         { status: "Order Placed", date: "2024-11-20 11:00 AM", location: "Order received", completed: true },
         { status: "Processing", date: "In progress", location: "Packaging your love", completed: false },
@@ -420,7 +420,7 @@ export const blogPosts = [
     id: 1,
     title: "The Secret Ingredient is Love: Mila & Aasif's Journey",
     slug: "secret-ingredient-love-story",
-    excerpt: "Discover how a simple vanilla cake on a rainy afternoon transformed into a lifetime of baking memories and the birth of LovinCraft.",
+    excerpt: "Discover how a simple vanilla cake on a rainy afternoon transformed into a lifetime of baking memories and the birth of lovrebo.",
     category: "Love Stories",
     author: "Mila & Aasif",
     date: "2024-11-15",
@@ -447,9 +447,9 @@ export const blogPosts = [
       
       <p>Then one evening, while going through my grandmother's old recipe box, I found it - a small envelope labeled "For when you find the one." Inside was her secret ingredient, along with a note: "Love isn't just a feeling, it's something you can taste."</p>
       
-      <h2>Building LovinCraft</h2>
+      <h2>Building lovrebo</h2>
       
-      <p>That discovery led to our first anniversary, where we decided to share this secret with the world. Every kit we create at LovinCraft contains not just premium ingredients, but the same secret ingredient our grandmothers used - the one that makes every bite taste like home, like memories, like love.</p>
+      <p>That discovery led to our first anniversary, where we decided to share this secret with the world. Every kit we create at lovrebo contains not just premium ingredients, but the same secret ingredient our grandmothers used - the one that makes every bite taste like home, like memories, like love.</p>
       
       <p>Because we believe everyone deserves to bake something that makes their loved ones feel special. Everyone deserves to create memories in the kitchen, one cake at a time.</p>
     `,
@@ -732,7 +732,7 @@ export const faqData = [
       },
       {
         question: "Can I modify or cancel my order?",
-        answer: "Orders can be modified or cancelled within 2 hours of placement. Please contact our support team immediately at support@lovincraft.com or call us. Once your order enters processing, modifications may not be possible."
+        answer: "Orders can be modified or cancelled within 2 hours of placement. Please contact our support team immediately at support@lovrebo.com or call us. Once your order enters processing, modifications may not be possible."
       },
       {
         question: "Do you offer gift wrapping?",
@@ -770,7 +770,7 @@ export const faqData = [
     questions: [
       {
         question: "What is the 'Secret Love Ingredient'?",
-        answer: "Our Secret Love Ingredient is a proprietary blend inspired by Mila & Aasif's love story. While we keep the exact recipe secret, it's a carefully crafted combination of natural flavors and aromatic essences that adds warmth and depth to every cake. It's completely safe, all-natural, and what makes LovinCraft truly special."
+        answer: "Our Secret Love Ingredient is a proprietary blend inspired by Mila & Aasif's love story. While we keep the exact recipe secret, it's a carefully crafted combination of natural flavors and aromatic essences that adds warmth and depth to every cake. It's completely safe, all-natural, and what makes lovrebo truly special."
       },
       {
         question: "Are your ingredients organic and natural?",

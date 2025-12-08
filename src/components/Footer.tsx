@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="flex items-center gap-2">
               <Heart className="h-6 w-6 fill-primary text-primary" />
               <span className="font-serif text-xl font-semibold text-foreground">
-                LovinCraft
+                lovrebo
               </span>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -48,7 +48,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <Mail className="mt-0.5 h-4 w-4 text-primary" />
-                <span>hello@lovincraft.com</span>
+                <span>hello@lovrebo.com</span>
               </li>
               <li className="flex items-start gap-2 text-sm text-muted-foreground">
                 <MapPin className="mt-0.5 h-4 w-4 text-primary" />
@@ -69,7 +69,7 @@ const Footer = () => {
 
         <div className="mt-12 border-t border-border pt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} LovinCraft. Crafted with{" "}
+            © {new Date().getFullYear()} lovrebo. Crafted with{" "}
             <Heart className="inline h-3 w-3 fill-primary text-primary" /> by Mila & Aasif
           </p>
         </div>

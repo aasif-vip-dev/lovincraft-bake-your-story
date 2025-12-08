@@ -81,7 +81,7 @@ const Story = () => {
               {/* Chapter 3 */}
               <div className="space-y-4">
                 <h2 className="font-serif text-3xl font-bold text-foreground">
-                  The Birth of LovinCraft
+                  The Birth of lovrebo
                 </h2>
                 <p className="text-lg leading-relaxed text-muted-foreground">
                   Two years later, on their anniversary, Mila and Aasif decided to share their secret with 
@@ -91,7 +91,7 @@ const Story = () => {
                   instructions.
                 </p>
                 <p className="text-lg leading-relaxed text-muted-foreground">
-                  LovinCraft was born from the belief that every cake should tell a story, every ingredient 
+                  lovrebo was born from the belief that every cake should tell a story, every ingredient
                   should carry meaning, and every person deserves to experience the magic of baking something 
                   truly special. Today, we continue that tradition, crafting each kit with the same love and 
                   care that brought us together.
