@@ -12,12 +12,14 @@ import { CreditCard, Wallet, Banknote } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useLoyalty } from "@/contexts/LoyaltyContext";
 import { useReferral } from "@/contexts/ReferralContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
 
 const Checkout = () => {
   const { items, total, clearCart } = useCart();
   const { addPoints, getDiscountPercentage } = useLoyalty();
   const { completeReferral, getReferralCode } = useReferral();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [giftWrap, setGiftWrap] = useState(false);
@@ -45,15 +47,15 @@ const Checkout = () => {
       completeReferral(email);
       // Award bonus points to referrer
       toast({
-        title: "Referral Bonus Applied! 🎉",
-        description: "Your friend earned 100 bonus points for referring you!",
+        title: t.checkout.referralBonus,
+        description: t.checkout.referralBonusDesc,
       });
     }
     
     clearCart();
     toast({
-      title: "Order Placed Successfully! 🎉",
-      description: `You earned ${pointsEarned} loyalty points!`,
+      title: t.checkout.orderPlaced,
+      description: t.checkout.pointsEarned.replace("{points}", pointsEarned.toString()),
     });
     
     navigate("/dashboard?tab=orders");
@@ -65,7 +67,7 @@ const Checkout = () => {
       <Navigation />
       
       <main className="container mx-auto px-4 py-12">
-        <h1 className="mb-8 font-serif text-4xl font-bold">Checkout</h1>
+        <h1 className="mb-8 font-serif text-4xl font-bold">{t.checkout.title}</h1>
 
         <form onSubmit={handleSubmit}>
           <div className="grid gap-8 lg:grid-cols-3">
@@ -74,22 +76,22 @@ const Checkout = () => {
               {/* Shipping Information */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Shipping Information</CardTitle>
+                  <CardTitle>{t.checkout.shippingInfo}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                      <Label htmlFor="firstName">First Name</Label>
+                      <Label htmlFor="firstName">{t.checkout.firstName}</Label>
                       <Input id="firstName" required />
                     </div>
                     <div>
-                      <Label htmlFor="lastName">Last Name</Label>
+                      <Label htmlFor="lastName">{t.checkout.lastName}</Label>
                       <Input id="lastName" required />
                     </div>
                   </div>
                   
                   <div>
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">{t.checkout.email}</Label>
                     <Input 
                       id="email" 
                       type="email" 
@@ -100,27 +102,27 @@ const Checkout = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="address">Address</Label>
+                    <Label htmlFor="address">{t.checkout.address}</Label>
                     <Input id="address" required />
                   </div>
                   
                   <div className="grid gap-4 md:grid-cols-3">
                     <div>
-                      <Label htmlFor="city">City</Label>
+                      <Label htmlFor="city">{t.checkout.city}</Label>
                       <Input id="city" required />
                     </div>
                     <div>
-                      <Label htmlFor="state">State</Label>
+                      <Label htmlFor="state">{t.checkout.state}</Label>
                       <Input id="state" required />
                     </div>
                     <div>
-                      <Label htmlFor="zip">ZIP Code</Label>
+                      <Label htmlFor="zip">{t.checkout.zipCode}</Label>
                       <Input id="zip" required />
                     </div>
                   </div>
                   
                   <div>
-                    <Label htmlFor="phone">Phone Number</Label>
+                    <Label htmlFor="phone">{t.checkout.phone}</Label>
                     <Input id="phone" type="tel" required />
                   </div>
                 </CardContent>
@@ -129,7 +131,7 @@ const Checkout = () => {
               {/* Payment Method */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Payment Method</CardTitle>
+                  <CardTitle>{t.checkout.paymentMethod}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid gap-4">
@@ -140,7 +142,7 @@ const Checkout = () => {
                       onClick={() => setPaymentMethod("card")}
                     >
                       <CreditCard className="mr-2 h-5 w-5" />
-                      Credit / Debit Card
+                      {t.checkout.creditDebitCard}
                     </Button>
                     
                     <Button
@@ -150,7 +152,7 @@ const Checkout = () => {
                       onClick={() => setPaymentMethod("paypal")}
                     >
                       <Wallet className="mr-2 h-5 w-5" />
-                      PayPal
+                      {t.checkout.paypal}
                     </Button>
                     
                     <Button
@@ -160,23 +162,23 @@ const Checkout = () => {
                       onClick={() => setPaymentMethod("cod")}
                     >
                       <Banknote className="mr-2 h-5 w-5" />
-                      Cash on Delivery
+                      {t.checkout.cashOnDelivery}
                     </Button>
                   </div>
 
                   {paymentMethod === "card" && (
                     <div className="space-y-4 border-t border-border pt-4">
                       <div>
-                        <Label htmlFor="cardNumber">Card Number</Label>
+                        <Label htmlFor="cardNumber">{t.checkout.cardNumber}</Label>
                         <Input id="cardNumber" placeholder="1234 5678 9012 3456" required />
                       </div>
                       <div className="grid gap-4 md:grid-cols-2">
                         <div>
-                          <Label htmlFor="expiry">Expiry Date</Label>
+                          <Label htmlFor="expiry">{t.checkout.expiryDate}</Label>
                           <Input id="expiry" placeholder="MM/YY" required />
                         </div>
                         <div>
-                          <Label htmlFor="cvv">CVV</Label>
+                          <Label htmlFor="cvv">{t.checkout.cvv}</Label>
                           <Input id="cvv" placeholder="123" required />
                         </div>
                       </div>
@@ -188,7 +190,7 @@ const Checkout = () => {
               {/* Gift Options */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Gift Options</CardTitle>
+                  <CardTitle>{t.checkout.giftOptions}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center space-x-2">
@@ -198,16 +200,16 @@ const Checkout = () => {
                       onCheckedChange={(checked) => setGiftWrap(checked as boolean)}
                     />
                     <label htmlFor="giftWrap" className="text-sm">
-                      Add gift wrapping (+$4.99)
+                      {t.checkout.giftWrap}
                     </label>
                   </div>
                   
                   {giftWrap && (
                     <div>
-                      <Label htmlFor="giftMessage">Gift Message</Label>
+                      <Label htmlFor="giftMessage">{t.checkout.giftMessage}</Label>
                       <Textarea 
                         id="giftMessage" 
-                        placeholder="Write a heartfelt message..."
+                        placeholder={t.checkout.giftMessagePlaceholder}
                         rows={3}
                       />
                     </div>
@@ -220,7 +222,7 @@ const Checkout = () => {
             <div>
               <Card className="sticky top-24">
                 <CardHeader>
-                  <CardTitle>Order Summary</CardTitle>
+                  <CardTitle>{t.checkout.orderSummary}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {items.map(item => (
@@ -232,36 +234,36 @@ const Checkout = () => {
                   
                   <div className="space-y-2 border-t border-border pt-4">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="text-muted-foreground">{t.cart.subtotal}</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
                     {loyaltyDiscount > 0 && (
                       <div className="flex justify-between text-sm text-primary">
-                        <span>Loyalty Discount ({loyaltyDiscount}%)</span>
+                        <span>{t.checkout.loyaltyDiscount} ({loyaltyDiscount}%)</span>
                         <span>-${discountAmount.toFixed(2)}</span>
                       </div>
                     )}
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Shipping</span>
-                      <span>{total > 50 ? 'FREE' : '$5.99'}</span>
+                      <span className="text-muted-foreground">{t.cart.shipping}</span>
+                      <span>{total > 50 ? t.common.free : '$5.99'}</span>
                     </div>
                     {giftWrap && (
                       <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Gift Wrap</span>
+                        <span className="text-muted-foreground">{t.checkout.giftOptions}</span>
                         <span>$5.99</span>
                       </div>
                     )}
                   </div>
 
                   <div className="flex justify-between border-t border-border pt-4">
-                    <span className="font-serif text-xl font-bold">Total</span>
+                    <span className="font-serif text-xl font-bold">{t.common.total}</span>
                     <span className="font-serif text-2xl font-bold text-accent">
                       ${finalTotal.toFixed(2)}
                     </span>
                   </div>
 
                   <Button type="submit" className="w-full" size="lg" disabled={loading}>
-                    {loading ? "Processing..." : "Place Order"}
+                    {loading ? t.checkout.processing : t.checkout.placeOrder}
                   </Button>
                 </CardContent>
               </Card>

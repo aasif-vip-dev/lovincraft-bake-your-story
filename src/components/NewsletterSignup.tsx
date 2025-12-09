@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, Gift } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { z } from "zod";
 
 interface NewsletterSignupProps {
@@ -22,6 +23,7 @@ const emailSchema = z.object({
 const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSignupProps) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +33,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
     
     if (!validation.success) {
       toast({
-        title: "Invalid Email",
+        title: t.newsletter.invalidEmail,
         description: validation.error.errors[0].message,
         variant: "destructive",
       });
@@ -48,14 +50,14 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
       const discountCode = `LOVE${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
       
       toast({
-        title: "Welcome to LovinCraft! 🎉",
+        title: t.newsletter.successTitle,
         description: (
           <div className="mt-2 space-y-2">
-            <p>Thank you for subscribing to our newsletter!</p>
+            <p>{t.newsletter.successMessage}</p>
             <div className="rounded-md bg-primary/10 p-3">
-              <p className="text-sm font-semibold">Your exclusive discount code:</p>
+              <p className="text-sm font-semibold">{t.newsletter.discountLabel}</p>
               <p className="font-mono text-lg font-bold text-primary">{discountCode}</p>
-              <p className="text-xs text-muted-foreground">Save 15% on your first order!</p>
+              <p className="text-xs text-muted-foreground">{t.newsletter.discountInfo}</p>
             </div>
           </div>
         ),
@@ -65,8 +67,8 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
       setEmail("");
     } catch (error) {
       toast({
-        title: "Subscription Failed",
-        description: "Something went wrong. Please try again later.",
+        title: t.newsletter.errorTitle,
+        description: t.newsletter.errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -81,7 +83,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
           <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="email"
-            placeholder="Enter your email"
+            placeholder={t.newsletter.placeholderShort}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="pl-10"
@@ -89,7 +91,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
           />
         </div>
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "Subscribing..." : "Subscribe"}
+          {isLoading ? t.newsletter.subscribing : t.newsletter.subscribe}
         </Button>
       </form>
     );
@@ -104,11 +106,10 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
           </div>
         </div>
         <h2 className="mb-2 font-serif text-3xl font-bold">
-          Join Our Baking Community
+          {t.newsletter.title}
         </h2>
         <p className="mb-6 text-muted-foreground">
-          Subscribe to our newsletter and receive exclusive recipes, baking tips, 
-          and a <span className="font-semibold text-primary">15% discount code</span> for your first order!
+          {t.newsletter.subtitle.replace("{discount}", t.newsletter.discount)}
         </p>
         
         <form onSubmit={handleSubmit} className="mx-auto flex max-w-md gap-2">
@@ -116,7 +117,7 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
             <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="email"
-              placeholder="Enter your email address"
+              placeholder={t.newsletter.placeholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="pl-10"
@@ -128,12 +129,12 @@ const NewsletterSignup = ({ variant = "default", className = "" }: NewsletterSig
             disabled={isLoading}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            {isLoading ? "Subscribing..." : "Get My Code"}
+            {isLoading ? t.newsletter.subscribing : t.newsletter.submit}
           </Button>
         </form>
         
         <p className="mt-4 text-xs text-muted-foreground">
-          We respect your privacy. Unsubscribe at any time.
+          {t.newsletter.privacy}
         </p>
       </div>
     </div>

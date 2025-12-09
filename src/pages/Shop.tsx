@@ -5,7 +5,6 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -19,6 +18,7 @@ import { Heart, ShoppingCart, Search, SlidersHorizontal, X } from "lucide-react"
 import { products } from "@/data/mockData";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
 import {
   Sheet,
@@ -31,6 +31,7 @@ import {
 const Shop = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { t } = useLanguage();
   
   // Filter states
   const [searchQuery, setSearchQuery] = useState("");
@@ -120,7 +121,7 @@ const Shop = () => {
     <div className="space-y-6">
       {/* Categories */}
       <div>
-        <h3 className="mb-3 font-semibold">Categories</h3>
+        <h3 className="mb-3 font-semibold">{t.shop.categories}</h3>
         <div className="space-y-2">
           {categories.map(category => (
             <div key={category} className="flex items-center space-x-2">
@@ -143,7 +144,7 @@ const Shop = () => {
       {/* Price Range */}
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-semibold">Price Range</h3>
+          <h3 className="font-semibold">{t.shop.priceRange}</h3>
           <span className="text-sm text-muted-foreground">
             ${priceRange[0]} - ${priceRange[1]}
           </span>
@@ -170,7 +171,7 @@ const Shop = () => {
           onClick={clearFilters}
         >
           <X className="mr-2 h-4 w-4" />
-          Clear All Filters
+          {t.shop.clearAllFilters}
         </Button>
       )}
     </div>
@@ -183,10 +184,10 @@ const Shop = () => {
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8 text-center">
           <h1 className="mb-4 font-serif text-5xl font-bold text-foreground">
-            Our Ingredients & Kits
+            {t.shop.title}
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Each product is carefully selected and crafted to bring love into your kitchen.
+            {t.shop.subtitle}
           </p>
         </div>
 
@@ -197,7 +198,7 @@ const Shop = () => {
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search ingredients, kits, or flavors..."
+              placeholder={t.shop.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -209,14 +210,14 @@ const Shop = () => {
             {/* Sort */}
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by" />
+                <SelectValue placeholder={t.shop.sortBy} />
               </SelectTrigger>
               <SelectContent className="z-50 bg-background">
-                <SelectItem value="featured">Featured</SelectItem>
-                <SelectItem value="price-low">Price: Low to High</SelectItem>
-                <SelectItem value="price-high">Price: High to Low</SelectItem>
-                <SelectItem value="name">Name: A to Z</SelectItem>
-                <SelectItem value="rating">Highest Rated</SelectItem>
+                <SelectItem value="featured">{t.shop.sortOptions.featured}</SelectItem>
+                <SelectItem value="price-low">{t.shop.sortOptions.priceLowHigh}</SelectItem>
+                <SelectItem value="price-high">{t.shop.sortOptions.priceHighLow}</SelectItem>
+                <SelectItem value="name">{t.shop.sortOptions.name}</SelectItem>
+                <SelectItem value="rating">{t.shop.sortOptions.rating}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -225,7 +226,7 @@ const Shop = () => {
               <SheetTrigger asChild>
                 <Button variant="outline" className="lg:hidden">
                   <SlidersHorizontal className="mr-2 h-4 w-4" />
-                  Filters
+                  {t.shop.filters}
                   {activeFiltersCount > 0 && (
                     <span className="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
                       {activeFiltersCount}
@@ -235,7 +236,7 @@ const Shop = () => {
               </SheetTrigger>
               <SheetContent side="left" className="w-80">
                 <SheetHeader>
-                  <SheetTitle>Filters</SheetTitle>
+                  <SheetTitle>{t.shop.filters}</SheetTitle>
                 </SheetHeader>
                 <div className="mt-6">
                   <FiltersContent />
@@ -251,7 +252,7 @@ const Shop = () => {
             <Card className="sticky top-20">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <h2 className="font-serif text-xl font-bold">Filters</h2>
+                  <h2 className="font-serif text-xl font-bold">{t.shop.filters}</h2>
                   {activeFiltersCount > 0 && (
                     <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-xs font-medium text-primary-foreground">
                       {activeFiltersCount}
@@ -269,18 +270,20 @@ const Shop = () => {
           <div className="flex-1">
             {/* Results Count */}
             <p className="mb-4 text-sm text-muted-foreground">
-              Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+              {t.shop.showing
+                .replace("{count}", filteredProducts.length.toString())
+                .replace("{products}", filteredProducts.length === 1 ? t.shop.product : t.shop.products)}
             </p>
 
             {filteredProducts.length === 0 ? (
               <Card>
                 <CardContent className="p-12 text-center">
                   <ShoppingCart className="mx-auto mb-4 h-16 w-16 text-muted" />
-                  <h3 className="mb-2 font-serif text-2xl font-bold">No products found</h3>
+                  <h3 className="mb-2 font-serif text-2xl font-bold">{t.shop.noProducts}</h3>
                   <p className="mb-4 text-muted-foreground">
-                    Try adjusting your filters or search query
+                    {t.shop.noProductsMessage}
                   </p>
-                  <Button onClick={clearFilters}>Clear Filters</Button>
+                  <Button onClick={clearFilters}>{t.shop.clearFilters}</Button>
                 </CardContent>
               </Card>
             ) : (
@@ -325,7 +328,7 @@ const Shop = () => {
                         onClick={() => addToCart({ ...product, image: product.image })}
                       >
                         <ShoppingCart className="mr-2 h-4 w-4" />
-                        Add to Cart
+                        {t.featured.addToCart}
                       </Button>
                       <Button 
                         variant="outline" 
@@ -344,10 +347,10 @@ const Shop = () => {
                             description: product.description 
                           });
                           toast({
-                            title: isInWishlist(product.id) ? "Removed from wishlist" : "Added to wishlist",
+                            title: isInWishlist(product.id) ? t.shop.removedFromWishlist : t.shop.addedToWishlist,
                             description: isInWishlist(product.id) 
-                              ? `${product.name} has been removed from your wishlist.`
-                              : `${product.name} has been added to your wishlist.`,
+                              ? t.shop.removedFromWishlistDesc.replace("{name}", product.name)
+                              : t.shop.addedToWishlistDesc.replace("{name}", product.name),
                           });
                         }}
                       >
