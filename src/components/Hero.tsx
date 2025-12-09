@@ -2,8 +2,11 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-baking.jpg";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Hero = () => {
+  const { t } = useLanguage();
+  
   return (
     <section className="relative min-h-[90vh] overflow-hidden">
       {/* Background Image */}
@@ -17,14 +20,13 @@ const Hero = () => {
       <div className="container relative mx-auto flex min-h-[90vh] flex-col items-center justify-center px-4 py-20 text-center">
         <div className="max-w-4xl space-y-8">
           <h1 className="font-serif text-5xl font-bold leading-tight text-foreground md:text-7xl">
-            Craft Your Love,
+            {t.hero.title1}
             <br />
-            <span className="text-primary-foreground">One Ingredient at a Time</span>
+            <span className="text-primary-foreground">{t.hero.title2}</span>
           </h1>
           
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground md:text-xl">
-            Every cake tells a story. Every ingredient holds a memory. 
-            Discover our handcrafted baking kits, inspired by a love that started in the kitchen.
+            {t.hero.subtitle}
           </p>
           
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
@@ -34,7 +36,7 @@ const Hero = () => {
               asChild
             >
               <Link to="/shop">
-                Start Baking Your Story
+                {t.hero.ctaPrimary}
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
@@ -46,7 +48,7 @@ const Hero = () => {
               asChild
             >
               <Link to="/story">
-                Discover Our Story
+                {t.hero.ctaSecondary}
               </Link>
             </Button>
           </div>

@@ -6,9 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Cart = () => {
   const { items, removeFromCart, updateQuantity, total } = useCart();
+  const { t } = useLanguage();
 
   if (items.length === 0) {
     return (
@@ -18,10 +20,10 @@ const Cart = () => {
           <Card className="mx-auto max-w-md text-center">
             <CardContent className="p-12">
               <ShoppingBag className="mx-auto mb-4 h-16 w-16 text-muted" />
-              <h2 className="mb-2 font-serif text-2xl font-bold">Your Cart is Empty</h2>
-              <p className="mb-6 text-muted-foreground">Add some love to your cart!</p>
+              <h2 className="mb-2 font-serif text-2xl font-bold">{t.cart.empty}</h2>
+              <p className="mb-6 text-muted-foreground">{t.cart.emptyMessage}</p>
               <Button asChild>
-                <Link to="/shop">Start Shopping</Link>
+                <Link to="/shop">{t.cart.startShopping}</Link>
               </Button>
             </CardContent>
           </Card>
@@ -36,7 +38,7 @@ const Cart = () => {
       <Navigation />
       
       <main className="container mx-auto px-4 py-12">
-        <h1 className="mb-8 font-serif text-4xl font-bold">Shopping Cart</h1>
+        <h1 className="mb-8 font-serif text-4xl font-bold">{t.cart.title}</h1>
 
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Cart Items */}
@@ -105,40 +107,40 @@ const Cart = () => {
           <div>
             <Card className="sticky top-24">
               <CardContent className="p-6">
-                <h2 className="mb-6 font-serif text-2xl font-bold">Order Summary</h2>
+                <h2 className="mb-6 font-serif text-2xl font-bold">{t.cart.orderSummary}</h2>
                 
                 <div className="space-y-4 border-b border-border pb-4">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Subtotal</span>
+                    <span className="text-muted-foreground">{t.cart.subtotal}</span>
                     <span className="font-semibold">${total.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Shipping</span>
-                    <span className="font-semibold">{total > 50 ? 'FREE' : '$5.99'}</span>
+                    <span className="text-muted-foreground">{t.cart.shipping}</span>
+                    <span className="font-semibold">{total > 50 ? t.common.free : '$5.99'}</span>
                   </div>
                 </div>
 
                 <div className="my-4">
-                  <label className="mb-2 block text-sm font-medium">Promo Code</label>
+                  <label className="mb-2 block text-sm font-medium">{t.cart.promoCode}</label>
                   <div className="flex gap-2">
-                    <Input placeholder="Enter code" />
-                    <Button variant="outline">Apply</Button>
+                    <Input placeholder={t.cart.enterCode} />
+                    <Button variant="outline">{t.common.apply}</Button>
                   </div>
                 </div>
 
                 <div className="mb-6 flex justify-between border-t border-border pt-4">
-                  <span className="font-serif text-xl font-bold">Total</span>
+                  <span className="font-serif text-xl font-bold">{t.common.total}</span>
                   <span className="font-serif text-2xl font-bold text-accent">
                     ${(total + (total > 50 ? 0 : 5.99)).toFixed(2)}
                   </span>
                 </div>
 
                 <Button asChild className="w-full" size="lg">
-                  <Link to="/checkout">Proceed to Checkout</Link>
+                  <Link to="/checkout">{t.cart.checkout}</Link>
                 </Button>
 
                 <Button asChild variant="outline" className="mt-2 w-full">
-                  <Link to="/shop">Continue Shopping</Link>
+                  <Link to="/shop">{t.cart.continueShopping}</Link>
                 </Button>
               </CardContent>
             </Card>

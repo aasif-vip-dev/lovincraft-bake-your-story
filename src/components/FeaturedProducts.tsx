@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 import { products } from "@/data/mockData";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
 
 const FeaturedProducts = () => {
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
+  const { t } = useLanguage();
   const featuredProducts = products.filter(p => p.category === "Secret Ingredient Kits").slice(0, 3);
   
   return (
@@ -17,10 +19,10 @@ const FeaturedProducts = () => {
       <div className="container mx-auto px-4">
         <div className="mb-12 text-center">
           <h2 className="mb-4 font-serif text-4xl font-bold text-foreground md:text-5xl">
-            Our Secret Ingredient Kits
+            {t.featured.title}
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Each kit is crafted with love, blending premium ingredients with that special something that makes every cake unforgettable.
+            {t.featured.subtitle}
           </p>
         </div>
 
@@ -57,7 +59,7 @@ const FeaturedProducts = () => {
                   onClick={() => addToCart({ ...product, image: product.image })}
                 >
                   <ShoppingCart className="mr-2 h-4 w-4" />
-                  Add to Cart
+                  {t.featured.addToCart}
                 </Button>
                 <Button 
                   variant="outline" 
@@ -76,10 +78,10 @@ const FeaturedProducts = () => {
                       description: product.description 
                     });
                     toast({
-                      title: isInWishlist(product.id) ? "Removed from wishlist" : "Added to wishlist",
+                      title: isInWishlist(product.id) ? t.featured.removedFromWishlist : t.featured.addedToWishlist,
                       description: isInWishlist(product.id) 
-                        ? `${product.name} has been removed from your wishlist.`
-                        : `${product.name} has been added to your wishlist.`,
+                        ? t.featured.wishlistRemoveDesc.replace("{name}", product.name)
+                        : t.featured.wishlistAddDesc.replace("{name}", product.name),
                     });
                   }}
                 >
@@ -98,7 +100,7 @@ const FeaturedProducts = () => {
             asChild
           >
             <Link to="/shop">
-              View All Products
+              {t.featured.viewAllProducts}
             </Link>
           </Button>
         </div>
