@@ -10,22 +10,29 @@ import ko from './translations/ko.json';
 
 export type Language = 'en-US' | 'en-GB' | 'ta' | 'ar' | 'zh' | 'ja' | 'ml' | 'te' | 'si' | 'de' | 'ko' | 'it' | 'nl' | 'sv' | 'hi';
 
-export const translations: Record<Language, typeof enUS> = {
+type TranslationType = typeof enUS;
+
+// Helper to merge partial translations with English fallback
+const mergeWithFallback = (partial: Record<string, unknown>): TranslationType => {
+  return { ...enUS, ...partial } as TranslationType;
+};
+
+export const translations: Record<Language, TranslationType> = {
   'en-US': enUS,
-  'en-GB': enUS, // Using en-US as base
-  'ta': enUS as typeof enUS, // Fallback to en-US
-  'ar': enUS as typeof enUS, // Fallback to en-US
-  'zh': enUS as typeof enUS, // Fallback to en-US
-  'ja': enUS as typeof enUS, // Fallback to en-US
-  'ml': enUS as typeof enUS, // Fallback to en-US
-  'te': enUS as typeof enUS, // Fallback to en-US  
-  'si': enUS as typeof enUS, // Fallback to en-US
-  'de': enUS as typeof enUS, // Fallback to en-US
-  'ko': enUS as typeof enUS, // Fallback to en-US
-  'it': enUS as typeof enUS, // Fallback to en-US
-  'nl': enUS as typeof enUS, // Fallback to en-US
-  'sv': enUS as typeof enUS, // Fallback to en-US
-  'hi': enUS as typeof enUS, // Fallback to en-US
+  'en-GB': mergeWithFallback(enGB),
+  'ta': mergeWithFallback(ta),
+  'ar': mergeWithFallback(ar),
+  'zh': mergeWithFallback(zh),
+  'ja': mergeWithFallback(ja),
+  'ml': enUS,
+  'te': enUS,
+  'si': enUS,
+  'de': mergeWithFallback(de),
+  'ko': mergeWithFallback(ko),
+  'it': enUS,
+  'nl': enUS,
+  'sv': enUS,
+  'hi': mergeWithFallback(hi),
 };
 
 export const languageNames: Record<Language, string> = {

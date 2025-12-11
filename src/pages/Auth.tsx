@@ -9,10 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Lock, User, Phone } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
 
 const Auth = () => {
   const { login, signup } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
@@ -29,10 +31,10 @@ const Auth = () => {
 
     try {
       await login(email, password);
-      toast({ title: "Welcome back!", description: "Successfully logged in" });
+      toast({ title: t.common.success, description: t.auth.loginTitle });
       navigate(from, { replace: true });
     } catch (error) {
-      toast({ title: "Error", description: "Invalid credentials", variant: "destructive" });
+      toast({ title: t.common.error, description: t.errors.generic, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -49,10 +51,10 @@ const Auth = () => {
 
     try {
       await signup(name, email, password);
-      toast({ title: "Welcome!", description: "Account created successfully" });
+      toast({ title: t.common.success, description: t.auth.signupTitle });
       navigate(from, { replace: true });
     } catch (error) {
-      toast({ title: "Error", description: "Could not create account", variant: "destructive" });
+      toast({ title: t.common.error, description: t.errors.generic, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -65,19 +67,19 @@ const Auth = () => {
       <main className="container mx-auto px-4 py-12">
         <Card className="mx-auto max-w-md">
           <CardHeader>
-            <CardTitle className="text-center font-serif text-3xl">Welcome to lovrebo</CardTitle>
+            <CardTitle className="text-center font-serif text-3xl">{t.auth.welcome}</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="login">{t.auth.loginTitle}</TabsTrigger>
+                <TabsTrigger value="signup">{t.auth.signupTitle}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <Label htmlFor="login-email">Email</Label>
+                    <Label htmlFor="login-email">{t.auth.email}</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input 
@@ -92,7 +94,7 @@ const Auth = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="login-password">Password</Label>
+                    <Label htmlFor="login-password">{t.auth.password}</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input 
@@ -107,7 +109,7 @@ const Auth = () => {
                   </div>
 
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Logging in..." : "Login"}
+                    {loading ? t.common.loading : t.auth.loginBtn}
                   </Button>
 
                   <div className="relative my-4">
@@ -115,7 +117,7 @@ const Auth = () => {
                       <span className="w-full border-t border-border" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                      <span className="bg-background px-2 text-muted-foreground">{t.auth.orContinueWith}</span>
                     </div>
                   </div>
 
@@ -129,7 +131,7 @@ const Auth = () => {
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div>
-                    <Label htmlFor="signup-name">Full Name</Label>
+                    <Label htmlFor="signup-name">{t.auth.name}</Label>
                     <div className="relative">
                       <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input 
@@ -143,7 +145,7 @@ const Auth = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email">{t.auth.email}</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input 
@@ -158,7 +160,7 @@ const Auth = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="signup-password">Password</Label>
+                    <Label htmlFor="signup-password">{t.auth.password}</Label>
                     <div className="relative">
                       <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input 
@@ -173,7 +175,7 @@ const Auth = () => {
                   </div>
 
                   <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Creating account..." : "Create Account"}
+                    {loading ? t.common.loading : t.auth.signupBtn}
                   </Button>
 
                   <div className="relative my-4">
@@ -181,7 +183,7 @@ const Auth = () => {
                       <span className="w-full border-t border-border" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+                      <span className="bg-background px-2 text-muted-foreground">{t.auth.orContinueWith}</span>
                     </div>
                   </div>
 
