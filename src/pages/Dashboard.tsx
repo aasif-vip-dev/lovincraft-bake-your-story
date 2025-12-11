@@ -20,6 +20,7 @@ import { useWishlist } from "@/contexts/WishlistContext";
 import { useCart } from "@/contexts/CartContext";
 import { useSupport } from "@/contexts/SupportContext";
 import { useLoyalty } from "@/contexts/LoyaltyContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
 import LoyaltyCard from "@/components/LoyaltyCard";
 import ReferralCard from "@/components/ReferralCard";
@@ -30,6 +31,7 @@ const Dashboard = () => {
   const { addToCart } = useCart();
   const { tickets, rateTicket } = useSupport();
   const { points, withdrawPoints, transactions, addPoints } = useLoyalty();
+  const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") || "profile";
   
@@ -323,39 +325,39 @@ const Dashboard = () => {
           <TabsList className="grid w-full grid-cols-3 md:grid-cols-9 gap-2 h-auto bg-muted/50 p-2 rounded-lg">
             <TabsTrigger value="profile" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <User className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Profile</span>
+              <span className="hidden sm:inline">{t.dashboard.profile}</span>
             </TabsTrigger>
             <TabsTrigger value="orders" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Package className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Orders</span>
+              <span className="hidden sm:inline">{t.dashboard.orders}</span>
             </TabsTrigger>
             <TabsTrigger value="wishlist" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Heart className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Wishlist</span>
+              <span className="hidden sm:inline">{t.dashboard.wishlist}</span>
             </TabsTrigger>
             <TabsTrigger value="rewards" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Award className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Rewards</span>
+              <span className="hidden sm:inline">{t.dashboard.rewards}</span>
             </TabsTrigger>
             <TabsTrigger value="transactions" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Activity className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">History</span>
+              <span className="hidden sm:inline">{t.dashboard.transactions}</span>
             </TabsTrigger>
             <TabsTrigger value="payments" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <CreditCard className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Payments</span>
+              <span className="hidden sm:inline">{t.dashboard.payments}</span>
             </TabsTrigger>
             <TabsTrigger value="tickets" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <TicketIcon className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Tickets</span>
+              <span className="hidden sm:inline">{t.dashboard.tickets}</span>
             </TabsTrigger>
             <TabsTrigger value="addresses" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <MapPin className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Addresses</span>
+              <span className="hidden sm:inline">{t.dashboard.addresses}</span>
             </TabsTrigger>
             <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Settings className="mr-2 h-4 w-4" />
-              <span className="hidden sm:inline">Settings</span>
+              <span className="hidden sm:inline">{t.dashboard.settings}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -395,24 +397,24 @@ const Dashboard = () => {
             {/* Profile Information */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5 text-primary" />
-                  Personal Information
+                  {t.dashboard.personalInformation}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input 
+                    <Label htmlFor="name">{t.dashboard.fullName}</Label>
+                    <Input
                       id="name" 
                       value={profileData.name}
                       onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input 
+                    <Label htmlFor="email">{t.dashboard.email}</Label>
+                    <Input
                       id="email" 
                       type="email" 
                       value={profileData.email}
@@ -420,8 +422,8 @@ const Dashboard = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input 
+                    <Label htmlFor="phone">{t.dashboard.phone}</Label>
+                    <Input
                       id="phone" 
                       type="tel" 
                       value={profileData.phone}
@@ -430,8 +432,8 @@ const Dashboard = () => {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="dob">Date of Birth</Label>
-                    <Input 
+                    <Label htmlFor="dob">{t.dashboard.dateOfBirth}</Label>
+                    <Input
                       id="dob" 
                       type="date" 
                       value={profileData.dateOfBirth}
@@ -439,8 +441,8 @@ const Dashboard = () => {
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <Label htmlFor="anniversary">Anniversary Date</Label>
-                    <Input 
+                    <Label htmlFor="anniversary">{t.dashboard.anniversaryDate}</Label>
+                    <Input
                       id="anniversary" 
                       type="date" 
                       value={profileData.anniversary}
@@ -448,19 +450,19 @@ const Dashboard = () => {
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <Label htmlFor="bio">Bio</Label>
+                    <Label htmlFor="bio">{t.dashboard.bio}</Label>
                     <Textarea 
                       id="bio" 
                       value={profileData.bio}
                       onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
-                      placeholder="Tell us about yourself..."
+                      placeholder={t.dashboard.bioPlaceholder}
                       rows={3}
                     />
                   </div>
                 </div>
                 <Button onClick={handleSaveProfile} className="w-full md:w-auto">
                   <User className="mr-2 h-4 w-4" />
-                  Save Changes
+                  {t.dashboard.saveChanges}
                 </Button>
               </CardContent>
             </Card>
@@ -468,13 +470,13 @@ const Dashboard = () => {
             {/* Preferences */}
             <Card>
               <CardHeader>
-                <CardTitle>Notification Preferences</CardTitle>
+                <CardTitle>{t.dashboard.notificationPreferences}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Newsletter</p>
-                    <p className="text-sm text-muted-foreground">Receive our weekly baking tips</p>
+                    <p className="font-medium">{t.dashboard.newsletter}</p>
+                    <p className="text-sm text-muted-foreground">{t.dashboard.newsletterDesc}</p>
                   </div>
                   <input 
                     type="checkbox" 
@@ -488,8 +490,8 @@ const Dashboard = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Promotions</p>
-                    <p className="text-sm text-muted-foreground">Special offers and discounts</p>
+                    <p className="font-medium">{t.dashboard.promotions}</p>
+                    <p className="text-sm text-muted-foreground">{t.dashboard.promotionsDesc}</p>
                   </div>
                   <input 
                     type="checkbox" 
@@ -503,8 +505,8 @@ const Dashboard = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="font-medium">Order Updates</p>
-                    <p className="text-sm text-muted-foreground">Track your order status</p>
+                    <p className="font-medium">{t.dashboard.orderUpdates}</p>
+                    <p className="text-sm text-muted-foreground">{t.dashboard.orderUpdatesDesc}</p>
                   </div>
                   <input 
                     type="checkbox" 
@@ -593,10 +595,10 @@ const Dashboard = () => {
               <Card>
                 <CardContent className="p-12 text-center">
                   <Heart className="mx-auto mb-4 h-16 w-16 text-muted" />
-                  <h3 className="mb-2 font-serif text-2xl font-bold">Your Wishlist is Empty</h3>
-                  <p className="mb-4 text-muted-foreground">Start adding items you love!</p>
+                  <h3 className="mb-2 font-serif text-2xl font-bold">{t.dashboard.wishlistEmpty}</h3>
+                  <p className="mb-4 text-muted-foreground">{t.dashboard.wishlistEmptyDesc}</p>
                   <Button asChild>
-                    <Link to="/shop">Browse Products</Link>
+                    <Link to="/shop">{t.dashboard.browseProducts}</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -669,25 +671,25 @@ const Dashboard = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-primary" />
-                  Withdraw Points
+                  {t.dashboard.withdrawPoints}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Convert your loyalty points to cash! 100 points = $1.00
+                  {t.dashboard.withdrawDesc}
                 </p>
                 <div className="flex items-center gap-2 p-4 bg-muted rounded-lg mb-4">
                   <Award className="h-5 w-5 text-primary" />
                   <div>
-                    <p className="font-semibold">{points} Points Available</p>
-                    <p className="text-sm text-muted-foreground">≈ ${(points / 100).toFixed(2)} USD</p>
+                    <p className="font-semibold">{t.dashboard.pointsAvailable.replace("{points}", points.toString())}</p>
+                    <p className="text-sm text-muted-foreground">{t.dashboard.equivalentUSD.replace("{amount}", (points / 100).toFixed(2))}</p>
                   </div>
                 </div>
                 <Dialog open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen}>
                   <DialogTrigger asChild>
                     <Button className="w-full" disabled={points < 100}>
                       <DollarSign className="mr-2 h-4 w-4" />
-                      Withdraw to Bank Account
+                      {t.dashboard.withdrawToBank}
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
@@ -696,7 +698,7 @@ const Dashboard = () => {
                     </DialogHeader>
                     <div className="space-y-4">
                       <div>
-                        <Label htmlFor="amount">Withdrawal Amount (USD)</Label>
+                        <Label htmlFor="amount">{t.dashboard.withdrawalAmount}</Label>
                         <Input
                           id="amount"
                           type="number"
@@ -708,13 +710,13 @@ const Dashboard = () => {
                           placeholder="0.00"
                         />
                         <p className="text-xs text-muted-foreground mt-1">
-                          Required points: {parseFloat(withdrawAmount || "0") * 100}
+                          {t.dashboard.requiredPoints} {parseFloat(withdrawAmount || "0") * 100}
                         </p>
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setIsWithdrawOpen(false)}>Cancel</Button>
-                      <Button onClick={handleWithdraw}>Confirm Withdrawal</Button>
+                      <Button variant="outline" onClick={() => setIsWithdrawOpen(false)}>{t.common.cancel}</Button>
+                      <Button onClick={handleWithdraw}>{t.dashboard.confirmWithdrawal}</Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -728,42 +730,42 @@ const Dashboard = () => {
             
             <Card>
               <CardHeader>
-                <CardTitle>Ways to Earn Points</CardTitle>
+                <CardTitle>{t.dashboard.waysToEarn}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid gap-3 md:grid-cols-2">
                   <div className="flex items-center gap-3 rounded-lg border border-border p-3">
                     <ShoppingCart className="h-5 w-5 text-primary" />
                     <div>
-                      <div className="font-semibold">Make a Purchase</div>
-                      <div className="text-sm text-muted-foreground">1 point per $1 spent</div>
+                      <div className="font-semibold">{t.dashboard.makePurchase}</div>
+                      <div className="text-sm text-muted-foreground">{t.dashboard.makePurchaseDesc}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 rounded-lg border border-border p-3">
                     <Star className="h-5 w-5 text-primary" />
                     <div>
-                      <div className="font-semibold">Write a Review</div>
-                      <div className="text-sm text-muted-foreground">50 points per review</div>
+                      <div className="font-semibold">{t.dashboard.writeReview}</div>
+                      <div className="text-sm text-muted-foreground">{t.dashboard.writeReviewDesc}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 rounded-lg border border-border p-3">
                     <Share2 className="h-5 w-5 text-primary" />
                     <div>
-                      <div className="font-semibold">Share on Social</div>
-                      <div className="text-sm text-muted-foreground">25 points per share</div>
+                      <div className="font-semibold">{t.dashboard.shareOnSocial}</div>
+                      <div className="text-sm text-muted-foreground">{t.dashboard.shareOnSocialDesc}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 rounded-lg border border-border p-3">
                     <Gift className="h-5 w-5 text-primary" />
                     <div>
-                      <div className="font-semibold">Refer a Friend</div>
-                      <div className="text-sm text-muted-foreground">100 bonus points</div>
+                      <div className="font-semibold">{t.dashboard.referFriend}</div>
+                      <div className="text-sm text-muted-foreground">{t.dashboard.referFriendDesc}</div>
                     </div>
                   </div>
                 </div>
                 
                 <Button asChild>
-                  <Link to="/shop">Start Shopping & Earning</Link>
+                  <Link to="/shop">{t.dashboard.startShoppingEarning}</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -775,9 +777,9 @@ const Dashboard = () => {
               <Card>
                 <CardContent className="p-12 text-center">
                   <TicketIcon className="mx-auto mb-4 h-12 w-12 text-muted" />
-                  <h3 className="mb-2 font-serif text-xl font-bold">No support tickets</h3>
+                  <h3 className="mb-2 font-serif text-xl font-bold">{t.dashboard.noSupportTickets}</h3>
                   <p className="text-muted-foreground">
-                    Use the chat widget to create a support ticket when you need help!
+                    {t.dashboard.noSupportTicketsDesc}
                   </p>
                 </CardContent>
               </Card>

@@ -4,8 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, MapPin, Heart } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Contact = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -15,11 +18,10 @@ const Contact = () => {
           <div className="mb-12 text-center">
             <Heart className="mx-auto mb-6 h-12 w-12 fill-primary text-primary" />
             <h1 className="mb-4 font-serif text-5xl font-bold text-foreground">
-              Get in Touch
+              {t.contactPage.title}
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-              We'd love to hear from you. Whether you have a question about our products, 
-              need help with a recipe, or just want to share your baking story – reach out!
+              {t.contactPage.subtitle}
             </p>
           </div>
 
@@ -27,13 +29,13 @@ const Contact = () => {
             {/* Contact Form */}
             <div className="rounded-2xl bg-card p-8 shadow-card">
               <h2 className="mb-6 font-serif text-2xl font-bold text-foreground">
-                Send Us a Message
+                {t.contactPage.sendMessage}
               </h2>
               
               <form className="space-y-6">
                 <div className="space-y-2">
                   <label htmlFor="name" className="text-sm font-medium text-foreground">
-                    Your Name
+                    {t.contactPage.yourName}
                   </label>
                   <Input 
                     id="name" 
@@ -44,7 +46,7 @@ const Contact = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="email" className="text-sm font-medium text-foreground">
-                    Email Address
+                    {t.contactPage.email}
                   </label>
                   <Input 
                     id="email" 
@@ -56,22 +58,22 @@ const Contact = () => {
 
                 <div className="space-y-2">
                   <label htmlFor="subject" className="text-sm font-medium text-foreground">
-                    Subject
+                    {t.contactPage.subject}
                   </label>
                   <Input 
                     id="subject" 
-                    placeholder="I have a question about..."
+                    placeholder={t.contactPage.subjectPlaceholder}
                     className="border-border bg-background"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <label htmlFor="message" className="text-sm font-medium text-foreground">
-                    Your Message
+                    {t.contactPage.message}
                   </label>
                   <Textarea 
                     id="message" 
-                    placeholder="Tell us what's on your mind..."
+                    placeholder={t.contactPage.messagePlaceholder}
                     rows={6}
                     className="border-border bg-background"
                   />
@@ -81,7 +83,7 @@ const Contact = () => {
                   type="submit" 
                   className="w-full bg-primary text-primary-foreground shadow-soft transition-smooth hover:shadow-lg"
                 >
-                  Send Message
+                  {t.contactPage.sendBtn}
                 </Button>
               </form>
             </div>
@@ -90,7 +92,7 @@ const Contact = () => {
             <div className="space-y-8">
               <div className="rounded-2xl bg-gradient-warm p-8 shadow-card">
                 <h2 className="mb-6 font-serif text-2xl font-bold text-foreground">
-                  Other Ways to Connect
+                  {t.contactPage.otherWays}
                 </h2>
                 
                 <div className="space-y-6">
@@ -99,12 +101,12 @@ const Contact = () => {
                       <Mail className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="mb-1 font-semibold text-foreground">Email Us</h3>
+                      <h3 className="mb-1 font-semibold text-foreground">{t.contactPage.emailUs}</h3>
                       <p className="text-sm text-muted-foreground">
-                        hello@lovrebo.com
+                        {t.contactPage.emailAddress}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        We typically respond within 24 hours
+                        {t.contactPage.responseTime}
                       </p>
                     </div>
                   </div>
@@ -114,12 +116,12 @@ const Contact = () => {
                       <MapPin className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="mb-1 font-semibold text-foreground">Visit Us</h3>
+                      <h3 className="mb-1 font-semibold text-foreground">{t.contactPage.visitUs}</h3>
                       <p className="text-sm text-muted-foreground">
-                        Where love meets ingredients
+                        {t.contactPage.location}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        (Our kitchen is where the magic happens!)
+                        {t.contactPage.locationNote}
                       </p>
                     </div>
                   </div>
@@ -128,20 +130,20 @@ const Contact = () => {
 
               <div className="rounded-2xl bg-card p-8 shadow-card">
                 <h2 className="mb-4 font-serif text-2xl font-bold text-foreground">
-                  Newsletter
+                  {t.contactPage.newsletterTitle}
                 </h2>
                 <p className="mb-6 text-sm text-muted-foreground">
-                  Subscribe to receive recipes, baking tips, and stories of love straight to your inbox.
+                  {t.contactPage.newsletterDesc}
                 </p>
                 
                 <div className="space-y-3">
                   <Input 
                     type="email" 
-                    placeholder="Your email address"
+                    placeholder={t.newsletter.placeholderShort}
                     className="border-border bg-background"
                   />
                   <Button className="w-full bg-primary text-primary-foreground">
-                    Subscribe
+                    {t.newsletter.subscribe}
                   </Button>
                 </div>
               </div>

@@ -5,8 +5,10 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, User, ArrowRight } from "lucide-react";
 import { blogPosts } from "@/data/mockData";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Blog = () => {
+  const { t } = useLanguage();
   const categories = Array.from(new Set(blogPosts.map(post => post.category)));
 
   return (
@@ -17,18 +19,17 @@ const Blog = () => {
         {/* Hero Section */}
         <div className="mb-16 text-center">
           <h1 className="mb-4 font-serif text-5xl font-bold text-foreground">
-            The lovrebo Blog
+            {t.blog.title}
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Baking tips, gift ideas, love stories, and everything in between. 
-            Join us on our journey of creating sweet memories.
+            {t.blog.subtitle}
           </p>
         </div>
 
         {/* Category Filter */}
         <div className="mb-12 flex flex-wrap justify-center gap-3">
           <Badge variant="secondary" className="cursor-pointer px-4 py-2">
-            All Posts
+            {t.blog.allPosts}
           </Badge>
           {categories.map(category => (
             <Badge 
@@ -76,7 +77,7 @@ const Blog = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2 font-medium text-primary">
-                    Read Full Story
+                    {t.blog.readFullStory}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </div>
                 </CardContent>
@@ -125,7 +126,7 @@ const Blog = () => {
                   
                   <div className="flex items-center gap-2 text-sm">
                     <User className="h-4 w-4" />
-                    <span className="text-muted-foreground">By {post.author}</span>
+                    <span className="text-muted-foreground">{t.blog.by} {post.author}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -137,19 +138,19 @@ const Blog = () => {
         <Card className="mt-16 border-primary/20 bg-gradient-warm text-center">
           <CardContent className="p-12">
             <h2 className="mb-4 font-serif text-3xl font-bold">
-              Never Miss a Post
+              {t.blog.neverMissPost}
             </h2>
             <p className="mb-6 text-muted-foreground">
-              Subscribe to our newsletter for baking tips, recipes, and heartfelt stories delivered to your inbox.
+              {t.blog.neverMissPostDesc}
             </p>
             <div className="mx-auto flex max-w-md gap-2">
               <input 
                 type="email" 
-                placeholder="your@email.com"
+                placeholder={t.newsletter.placeholderShort}
                 className="flex-1 rounded-md border border-border bg-background px-4 py-2"
               />
               <button className="rounded-md bg-primary px-6 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-                Subscribe
+                {t.blog.subscribe}
               </button>
             </div>
           </CardContent>
