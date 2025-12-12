@@ -438,8 +438,25 @@
     "title": "Chat with us",
     "placeholder": "Type your message...",
     "send": "Send",
-    "welcomeMessage": "Hello! How can we help you today?",
+    "welcomeMessage": "Hi! Welcome to lovrebo Support! 💕 How can I help you today?",
     "offlineMessage": "We're currently offline. Leave a message and we'll get back to you."
+  },
+  "chatWidget": {
+    "support": "Support",
+    "online": "Online",
+    "createTicket": "Create Support Ticket",
+    "subject": "Subject",
+    "subjectPlaceholder": "Brief description of your issue",
+    "emailPlaceholder": "your@email.com",
+    "description": "Description",
+    "descriptionPlaceholder": "Detailed description of your issue...",
+    "submitTicket": "Submit Ticket",
+    "ticketCreated": "Ticket Created!",
+    "ticketCreatedDesc": "Your ticket {ticketId} has been created. We'll respond within 24 hours.",
+    "missingInfo": "Missing Information",
+    "fillAllFields": "Please fill in all fields",
+    "thankYouFeedback": "Thank you for your feedback! 💝",
+    "feedbackDesc": "Your rating helps us improve our support experience."
   },
   "social": {
     "shareTitle": "Share",
