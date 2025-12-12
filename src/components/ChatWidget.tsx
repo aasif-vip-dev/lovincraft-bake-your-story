@@ -10,6 +10,7 @@ import { useSupport } from "@/contexts/SupportContext";
 import { toast } from "@/hooks/use-toast";
 import loveLogo from "@/assets/love-logo.png";
 import RatingComponent from "@/components/RatingComponent";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Message {
   id: string;
@@ -22,12 +23,13 @@ interface Message {
 }
 
 const ChatWidget = () => {
+  const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [showTicketForm, setShowTicketForm] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
-      text: "Hi! Welcome to lovrebo Support! 💕 How can I help you today?",
+      text: t.chat.welcomeMessage,
       sender: "bot",
       timestamp: new Date().toISOString(),
     },
@@ -203,10 +205,10 @@ const ChatWidget = () => {
         <div className="flex items-center gap-2">
           <img src={loveLogo} alt="Support" className="h-8 w-8" />
           <div>
-            <CardTitle className="text-lg">lovrebo Support</CardTitle>
+            <CardTitle className="text-lg">{t.common.brandName} {t.chatWidget.support}</CardTitle>
             <Badge variant="secondary" className="mt-1">
               <span className="mr-1 h-2 w-2 rounded-full bg-green-500"></span>
-              Online
+              {t.chatWidget.online}
             </Badge>
           </div>
         </div>
@@ -266,7 +268,7 @@ const ChatWidget = () => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-                placeholder="Type your message..."
+                placeholder={t.chat.placeholder}
               />
               <Button onClick={handleSendMessage} size="icon">
                 <Send className="h-4 w-4" />
@@ -279,7 +281,7 @@ const ChatWidget = () => {
               onClick={() => setShowTicketForm(true)}
             >
               <Ticket className="mr-2 h-4 w-4" />
-              Create Support Ticket
+              {t.chatWidget.createTicket}
             </Button>
           </>
         ) : (
@@ -287,19 +289,19 @@ const ChatWidget = () => {
             {/* Ticket Form */}
             <div className="space-y-4">
               <div>
-                <Label htmlFor="subject">Subject</Label>
+                <Label htmlFor="subject">{t.chatWidget.subject}</Label>
                 <Input
                   id="subject"
                   value={ticketForm.subject}
                   onChange={(e) =>
                     setTicketForm({ ...ticketForm, subject: e.target.value })
                   }
-                  placeholder="Brief description of your issue"
+                  placeholder={t.chatWidget.subjectPlaceholder}
                 />
               </div>
 
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t.auth.email}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -307,19 +309,19 @@ const ChatWidget = () => {
                   onChange={(e) =>
                     setTicketForm({ ...ticketForm, email: e.target.value })
                   }
-                  placeholder="your@email.com"
+                  placeholder={t.chatWidget.emailPlaceholder}
                 />
               </div>
 
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t.chatWidget.description}</Label>
                 <Textarea
                   id="description"
                   value={ticketForm.description}
                   onChange={(e) =>
                     setTicketForm({ ...ticketForm, description: e.target.value })
                   }
-                  placeholder="Detailed description of your issue..."
+                  placeholder={t.chatWidget.descriptionPlaceholder}
                   rows={4}
                 />
               </div>
@@ -327,13 +329,13 @@ const ChatWidget = () => {
               <div className="flex gap-2">
                 <Button onClick={handleCreateTicket} className="flex-1">
                   <Ticket className="mr-2 h-4 w-4" />
-                  Submit Ticket
+                  {t.chatWidget.submitTicket}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setShowTicketForm(false)}
                 >
-                  Cancel
+                  {t.common.cancel}
                 </Button>
               </div>
             </div>
