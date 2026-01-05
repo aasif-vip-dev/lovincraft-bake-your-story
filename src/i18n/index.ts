@@ -12,9 +12,31 @@ export type Language = 'en-US' | 'en-GB' | 'ta' | 'ar' | 'zh' | 'ja' | 'ml' | 't
 
 type TranslationType = typeof enUS;
 
-// Helper to merge partial translations with English fallback
+// Deep merge helper to properly merge nested translation objects
+const deepMerge = (target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> => {
+  const result = { ...target };
+  
+  for (const key of Object.keys(source)) {
+    if (
+      source[key] !== null &&
+      typeof source[key] === 'object' &&
+      !Array.isArray(source[key]) &&
+      target[key] !== null &&
+      typeof target[key] === 'object' &&
+      !Array.isArray(target[key])
+    ) {
+      result[key] = deepMerge(target[key] as Record<string, unknown>, source[key] as Record<string, unknown>);
+    } else {
+      result[key] = source[key];
+    }
+  }
+  
+  return result;
+};
+
+// Helper to merge partial translations with English fallback (deep merge)
 const mergeWithFallback = (partial: Record<string, unknown>): TranslationType => {
-  return { ...enUS, ...partial } as TranslationType;
+  return deepMerge(enUS as Record<string, unknown>, partial) as TranslationType;
 };
 
 export const translations: Record<Language, TranslationType> = {
