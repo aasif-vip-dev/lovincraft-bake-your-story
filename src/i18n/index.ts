@@ -7,6 +7,9 @@ import zh from './translations/zh.json';
 import ja from './translations/ja.json';
 import de from './translations/de.json';
 import ko from './translations/ko.json';
+import it from './translations/it.json';
+import nl from './translations/nl.json';
+import sv from './translations/sv.json';
 
 export type Language = 'en-US' | 'en-GB' | 'ta' | 'ar' | 'zh' | 'ja' | 'ml' | 'te' | 'si' | 'de' | 'ko' | 'it' | 'nl' | 'sv' | 'hi';
 
@@ -51,9 +54,9 @@ export const translations: Record<Language, TranslationType> = {
   'si': enUS,
   'de': mergeWithFallback(de),
   'ko': mergeWithFallback(ko),
-  'it': enUS,
-  'nl': enUS,
-  'sv': enUS,
+  'it': mergeWithFallback(it),
+  'nl': mergeWithFallback(nl),
+  'sv': mergeWithFallback(sv),
   'hi': mergeWithFallback(hi),
 };
 
