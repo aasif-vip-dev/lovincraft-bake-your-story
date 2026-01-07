@@ -201,3 +201,101 @@ All colors MUST be HSL.
   opacity: 0.8;
 }
 
+/* RTL (Right-to-Left) Support for Arabic */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .prose ul,
+[dir="rtl"] .prose ol {
+  padding-left: 0;
+  padding-right: 1.5em;
+}
+
+/* Flip flex layouts in RTL */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-6 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* Mirror common spacing utilities */
+[dir="rtl"] .ml-auto { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .mr-auto { margin-right: 0; margin-left: auto; }
+[dir="rtl"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+[dir="rtl"] .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+[dir="rtl"] .ml-3 { margin-left: 0; margin-right: 0.75rem; }
+[dir="rtl"] .mr-3 { margin-right: 0; margin-left: 0.75rem; }
+[dir="rtl"] .ml-4 { margin-left: 0; margin-right: 1rem; }
+[dir="rtl"] .mr-4 { margin-right: 0; margin-left: 1rem; }
+
+[dir="rtl"] .pl-4 { padding-left: 0; padding-right: 1rem; }
+[dir="rtl"] .pr-4 { padding-right: 0; padding-left: 1rem; }
+[dir="rtl"] .pl-6 { padding-left: 0; padding-right: 1.5rem; }
+[dir="rtl"] .pr-6 { padding-right: 0; padding-left: 1.5rem; }
+
+/* Mirror positioning */
+[dir="rtl"] .left-0 { left: auto; right: 0; }
+[dir="rtl"] .right-0 { right: auto; left: 0; }
+[dir="rtl"] .left-4 { left: auto; right: 1rem; }
+[dir="rtl"] .right-4 { right: auto; left: 1rem; }
+
+/* Mirror border radius */
+[dir="rtl"] .rounded-l { border-radius: 0 var(--radius) var(--radius) 0; }
+[dir="rtl"] .rounded-r { border-radius: var(--radius) 0 0 var(--radius); }
+[dir="rtl"] .rounded-l-lg { border-radius: 0 0.5rem 0.5rem 0; }
+[dir="rtl"] .rounded-r-lg { border-radius: 0.5rem 0 0 0.5rem; }
+
+/* Mirror text alignment */
+[dir="rtl"] .text-left { text-align: right; }
+[dir="rtl"] .text-right { text-align: left; }
+
+/* Mirror transforms and icons */
+[dir="rtl"] .rotate-180 { transform: rotate(0deg); }
+[dir="rtl"] [class*="chevron-right"],
+[dir="rtl"] [class*="arrow-right"] { transform: scaleX(-1); }
+[dir="rtl"] [class*="chevron-left"],
+[dir="rtl"] [class*="arrow-left"] { transform: scaleX(-1); }
+
+/* Mirror gap spacing for grid/flex */
+[dir="rtl"] .gap-x-2, [dir="rtl"] .gap-x-4, [dir="rtl"] .gap-x-6 {
+  direction: rtl;
+}
+
+/* RTL-aware borders */
+[dir="rtl"] .border-l { border-left: 0; border-right: 1px solid hsl(var(--border)); }
+[dir="rtl"] .border-r { border-right: 0; border-left: 1px solid hsl(var(--border)); }
+[dir="rtl"] .border-l-2 { border-left: 0; border-right: 2px solid hsl(var(--border)); }
+[dir="rtl"] .border-r-2 { border-right: 0; border-left: 2px solid hsl(var(--border)); }
+
+/* Navigation and sidebar mirroring */
+[dir="rtl"] nav .flex { flex-direction: row-reverse; }
+[dir="rtl"] .sidebar { right: auto; left: 0; }
+
+/* Form elements alignment */
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+}
+
+[dir="rtl"] input[type="number"] {
+  text-align: left;
+}
+
+/* Checkbox and radio label alignment */
+[dir="rtl"] .checkbox-wrapper,
+[dir="rtl"] .radio-wrapper {
+  flex-direction: row-reverse;
+}
+
+/* Scroll areas */
+[dir="rtl"] .scroll-area {
+  direction: rtl;
+}
+
